@@ -1,0 +1,21 @@
+services:
+  db-mysql-sso:
+    image: mysql:5.7.40
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - MYSQL_DATABASE=${DB_NAME}
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+    healthcheck:
+      test: "mysql -uroot -p$$MYSQL_ROOT_PASSWORD  -e 'SHOW databases'"
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    ports:
+      - "${DB_PORT}:3306"
+    volumes:
+      - mysql_sso_data:/var/lib/mysql
+    expose:
+      - 3306
+#docker compose -p sso-nodejs-mysql -f docker-compose.yml up -d
