@@ -9,6 +9,7 @@ import { configPassport } from "./controller/passportController";
 import configSession from "./configs/config.session";
 import flash from "connect-flash";
 import configLoginWithGoogle from "./controller/googleController";
+import configLoginWithFacebook from "./controller/facebookController";
 const app = express();
 
 const port = process.env.PORT || 8888;
@@ -38,6 +39,7 @@ initApiRoute(app);
 
 configPassport();
 configLoginWithGoogle();
+configLoginWithFacebook();
 app.listen(port, hostname, () => {
   console.log(`Server running on port ${port}`);
 });

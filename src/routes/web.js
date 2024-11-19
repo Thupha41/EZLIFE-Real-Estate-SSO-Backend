@@ -7,7 +7,6 @@ import {
   getEditUserPage,
   handleEditUser,
 } from "../controller/homeController";
-import { testApi } from "../controller/authController";
 import loginController from "../controller/loginController";
 import passport from "passport";
 import checkUser from "../middleware/checkUser";
@@ -20,7 +19,6 @@ router.post("/user/create-user", postCreateUser);
 router.post("/delete-user/:id", handleDeleteUser);
 router.get("/user/update-user/:id", getEditUserPage);
 router.post("/user/update-user", handleEditUser);
-router.get("/api/test-api", testApi);
 router.get("/login", checkUser.isLogin, loginController.getLoginPage);
 
 router.post("/login", function (req, res, next) {
@@ -41,10 +39,11 @@ router.post("/login", function (req, res, next) {
   })(req, res, next);
 });
 
-router.post("/logout", auditLogMiddleware, handleLogout);
+router.post("/logout", handleLogout);
 
 router.post("/verify-token", loginController.verifySSOToken);
 
+//google
 router.get(
   "/auth/google",
   passport.authenticate("google", {
@@ -61,6 +60,26 @@ router.get(
 
     //save cookies
 
+    return res.render("social.ejs", { ssoToken: req.user.code });
+  }
+);
+
+//facebook
+router.get(
+  "/auth/facebook",
+  passport.authenticate("facebook", {
+    scope: ["email", "public_profile"],
+  })
+);
+
+router.get(
+  "/facebook/redirect",
+  passport.authenticate("facebook", {
+    failureRedirect: "/login",
+    session: true,
+  }),
+  function (req, res) {
+    console.log(">>> checkout req.user", req.user);
     return res.render("social.ejs", { ssoToken: req.user.code });
   }
 );

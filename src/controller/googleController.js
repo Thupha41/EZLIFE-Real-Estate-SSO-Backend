@@ -25,7 +25,7 @@ const configLoginWithGoogle = () => {
           googleId: profile.id,
         };
         console.log(">>> checkout profile", profile);
-        let user = await AuthService.upsertUserGoogleLogin(typeLogin, rawData);
+        let user = await AuthService.upsertUserSocialMedia(typeLogin, rawData);
         user.code = uuidv4();
         return cb(null, user);
       }
