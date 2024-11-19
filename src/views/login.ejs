@@ -23,21 +23,83 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
   </head>
   <style>
-    body {
-      font-family: "Poppins";
-      font-size: 22px;
+    :root {
+      --primary-color: #2563eb;
+      --secondary-color: #64748b;
+      --danger-color: #dc2626;
+      --success-color: #16a34a;
+      --background-color: #f8fafc;
+      --card-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1),
+        0 2px 4px -2px rgb(0 0 0 / 0.1);
     }
+    body {
+      font-family: "Poppins", sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      background-color: var(--background-color);
+      color: #334155;
+    }
+    .card {
+      border: none;
+      border-radius: 16px;
+      box-shadow: var(--card-shadow);
+      background: white;
+      transition: transform 0.2s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-2px);
+    }
+    .card-body {
+      padding: 2.5rem;
+    }
+    .btn-back {
+      padding: 0.5rem 0;
+      color: var(--secondary-color) !important;
+      transition: color 0.2s ease;
+    }
+
+    .btn-back:hover {
+      color: var(--primary-color) !important;
+    }
+
     .bi-google {
-      font-size: 30px;
-      color: #dd4b39;
-      cursor: pointer;
-      padding: 0 7px;
+      font-size: 24px;
+      color: #ea4335;
     }
     .bi-facebook {
-      font-size: 30px;
-      color: #3b5998;
-      cursor: pointer;
-      padding: 0 7px;
+      font-size: 24px;
+      color: #1877f2;
+    }
+
+    .card-title {
+      font-size: 2rem;
+      font-weight: 600;
+      color: #1e293b;
+    }
+
+    .form-label {
+      font-weight: 500;
+      color: #475569;
+      margin-bottom: 0.5rem;
+    }
+
+    .form-control {
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      border: 1px solid #e2e8f0;
+      font-size: 0.95rem;
+      transition: all 0.2s ease;
+    }
+
+    .form-control:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+
+    .input-group .btn {
+      border-top-right-radius: 8px;
+      border-bottom-right-radius: 8px;
     }
     /* .login-container {
       padding-top: 20px;
@@ -91,6 +153,128 @@
 
     .shake {
       animation: shake 0.6s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+    }
+
+    /* Add to your existing styles */
+    hr {
+      position: relative;
+      border: none;
+      height: 1px;
+      background: #333;
+      margin: 20px 0;
+    }
+
+    #btn-login {
+      padding: 0.75rem;
+      font-weight: 500;
+      border-radius: 8px;
+      background-color: var(--primary-color);
+      border: none;
+      transition: all 0.2s ease;
+    }
+
+    #btn-login:hover {
+      background-color: #1d4ed8;
+      transform: translateY(-1px);
+    }
+
+    .text-danger {
+      color: var(--danger-color) !important;
+    }
+
+    hr {
+      border-color: #e2e8f0;
+      opacity: 0.2;
+    }
+
+    /* Social login buttons */
+    .social-login {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+    }
+
+    .social-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background-color: #f8fafc;
+      transition: all 0.2s ease;
+    }
+
+    .bi-google {
+      font-size: 24px;
+      color: #ea4335;
+    }
+
+    .bi-facebook {
+      font-size: 24px;
+      color: #1877f2;
+    }
+
+    .social-btn:hover {
+      transform: translateY(-2px);
+      background-color: #f1f5f9;
+    }
+
+    /* Alert styles */
+    .alert {
+      border-radius: 8px;
+      font-size: 0.9rem;
+      padding: 1rem;
+    }
+
+    /* Image container */
+    .login-image-container {
+      position: relative;
+      height: 100%;
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    .login-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 16px;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .card-body {
+        padding: 1.5rem;
+      }
+
+      .card-title {
+        font-size: 1.75rem;
+      }
+    }
+
+    /* Animation for form elements */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .form-group {
+      animation: fadeIn 0.5s ease forwards;
+    }
+
+    .form-group:nth-child(2) {
+      animation-delay: 0.1s;
+    }
+
+    .form-group:nth-child(3) {
+      animation-delay: 0.2s;
     }
   </style>
 
@@ -157,7 +341,7 @@
           },
           error: function (request, status, error) {
             $("#password").val("");
-            showError(request.responseText || "Invalid email or password");
+            showError("Invalid email or password");
           },
         });
       });
@@ -183,6 +367,11 @@
         localStorage.setItem("clientURL", $("#redirectURL").val());
         window.location.href = "/auth/google";
       });
+      $("#iconFacebook").on("click", function () {
+        localStorage.removeItem("clientURL");
+        localStorage.setItem("clientURL", $("#redirectURL").val());
+        window.location.href = "/auth/facebook";
+      });
     });
 
     $(document).ready(function () {
@@ -202,47 +391,46 @@
   </script>
   <body>
     <input type="hidden" id="redirectURL" value="<%= redirectURL %>" />
-    <div class="container bg-light min-vh-100 d-flex align-items-center">
-      <div class="row w-100">
+    <div class="container min-vh-100 d-flex align-items-center py-5">
+      <div class="row w-100 g-0">
         <div class="col-md-6 mx-auto">
-          <div class="card shadow">
+          <div class="card">
             <div class="card-body">
-              <button class="btn btn-link text-primary mb-3 btn-back">
+              <button class="btn btn-link btn-back mb-4">
                 <img
                   src="/images/back.png"
                   alt="Back"
                   class="me-2"
-                  style="width: 24px"
+                  style="width: 20px"
                 />
-                Back
+                <span>Back</span>
               </button>
 
-              <h2 class="card-title mb-4">Login</h2>
+              <h2 class="card-title mb-3">Welcome Back</h2>
               <p class="text-muted mb-4">
-                Login to access your EffiRoute account
+                Login to access your EZLIFE Real Estate account
               </p>
 
               <form id="loginForm" novalidate>
                 <div
-                  class="alert alert-danger my-1 none-error-message"
+                  class="alert alert-danger my-3 none-error-message"
                   role="alert"
                   id="error-message"
                 ></div>
-                <div class="mb-3">
-                  <label for="username" class="form-label">Email</label>
+
+                <div class="form-group mb-4">
+                  <label for="username" class="form-label">Email Address</label>
                   <input
                     type="email"
                     class="form-control"
                     id="username"
                     name="username"
-                    placeholder="Please enter your email address"
-                    aria-label="Email address"
-                    autocomplete="email"
+                    placeholder="Enter your email address"
                     required
                   />
                 </div>
 
-                <div class="mb-3">
+                <div class="form-group mb-4">
                   <label for="password" class="form-label">Password</label>
                   <div class="input-group">
                     <input
@@ -250,28 +438,24 @@
                       class="form-control"
                       id="password"
                       name="password"
-                      placeholder="Please enter your password"
-                      aria-label="Password"
-                      autocomplete="current-password"
+                      placeholder="Enter your password"
                       required
-                      minlength="6"
                     />
                     <button
                       class="btn btn-outline-secondary"
                       type="button"
                       id="togglePassword"
-                      aria-label="Toggle password visibility"
                     >
                       <i class="bi bi-eye"></i>
                     </button>
                   </div>
                 </div>
 
-                <div
-                  class="d-flex justify-content-center align-items-center mb-4"
-                >
-                  <a href="/forgot-password" class="text-danger"
-                    >Forgot Password</a
+                <div class="d-flex justify-content-end mb-4">
+                  <a
+                    href="/forgot-password"
+                    class="text-danger text-decoration-none"
+                    >Forgot Password?</a
                   >
                 </div>
 
@@ -280,31 +464,48 @@
                   type="button"
                   class="btn btn-primary w-100 mb-4"
                 >
-                  Login
+                  Sign In
                 </button>
-              </form>
 
-              <div class="text-center">
-                <p class="text-muted mb-3">Or login with</p>
-                <div class="d-flex justify-content-center">
-                  <a href="/auth/google">
-                    <i
-                      id="iconGoogle"
-                      class="bi bi-google"
-                      title="Login with Google"
-                    ></i>
+                <div class="position-relative my-4">
+                  <hr />
+                  <p
+                    class="text-muted position-absolute top-50 start-50 translate-middle bg-white px-3"
+                  >
+                    or continue with
+                  </p>
+                </div>
+
+                <div class="social-login mb-4">
+                  <a href="/auth/google" id="iconGoogle" class="social-btn">
+                    <i class="bi bi-google"></i>
+                  </a>
+                  <a href="/auth/facebook" id="iconFacebook" class="social-btn">
+                    <i class="bi bi-facebook"></i>
                   </a>
                 </div>
-              </div>
+
+                <p class="text-center text-muted mb-0">
+                  Don't have an account?
+                  <a
+                    href="/signup"
+                    class="text-primary text-decoration-none fw-bold"
+                    >Sign up</a
+                  >
+                </p>
+              </form>
             </div>
           </div>
         </div>
+
         <div class="col-md-6 d-none d-md-block">
-          <img
-            src="/images/LoginImage.jpg"
-            alt="Login illustration"
-            class="img-fluid h-100 object-fit-cover"
-          />
+          <div class="login-image-container">
+            <img
+              src="/images/LoginImage.jpg"
+              alt="Login illustration"
+              class="login-image"
+            />
+          </div>
         </div>
       </div>
     </div>

@@ -7,9 +7,6 @@ const nonSecurePaths = [
   "/auth/logout",
   "/auth/register",
   "/auth/login",
-  "/verify-services-jwt",
-  "/procurement-plan/search",
-  "/procurement-plan/filter",
   "/users/search",
 ];
 const createToken = (payload) => {

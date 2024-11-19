@@ -1,7 +1,7 @@
 {
-  "name": "EZLIFE-Real-Estate-SSO-Backend",
+  "name": "sso-backend",
   "version": "1.0.0",
-  "description": "EZLIFE Real Estate SSO Backend",
+  "description": "Real Estate SSO Backend",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -40,6 +40,7 @@
     "mysql2": "2.3.3",
     "nodemailer": "^6.9.15",
     "passport": "0.5.2",
+    "passport-facebook": "^3.0.0",
     "passport-google-oauth20": "2.0.0",
     "passport-local": "1.0.0",
     "sequelize": "6.13.0",

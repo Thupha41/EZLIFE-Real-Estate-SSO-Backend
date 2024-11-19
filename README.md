@@ -1,3 +1,3 @@
 # EZLIFE-Real-Estate-SSO-Backend
 
-Route Optimizer Application for South Vietnam Rice Husk Market
+Implement single sign on for ezlife real estate application

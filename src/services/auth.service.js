@@ -165,37 +165,37 @@ class AuthService {
     }
   };
 
-  static upsertUserGoogleLogin = async (typeLogin, rawData) => {
+  static upsertUserSocialMedia = async (typeLogin, rawData) => {
     try {
       let user = null;
-      if (typeLogin === "google") {
-        // First check if user exists with google login
-        user = await db.User.findOne({
-          where: { email: rawData.email, typeLogin: typeLogin },
+
+      // First check if user exists with google login
+      user = await db.User.findOne({
+        where: { email: rawData.email, typeLogin: typeLogin },
+        raw: true,
+      });
+
+      if (!user) {
+        // If not found with google login, check if email exists with local login
+        const localUser = await db.User.findOne({
+          where: { email: rawData.email, typeLogin: "local" },
           raw: true,
         });
 
-        if (!user) {
-          // If not found with google login, check if email exists with local login
-          const localUser = await db.User.findOne({
-            where: { email: rawData.email, typeLogin: "local" },
-            raw: true,
-          });
-
-          // Create a new account
-          user = await db.User.create({
-            email: rawData.email,
-            username: rawData.username,
-            typeLogin: typeLogin,
-            roleId: localUser ? localUser.roleId : 1,
-          });
-          user = user.get({ plain: true });
-        }
-
-        // Get role with permission
-        const roleWithPermission = await JWTService.getRoleWithPermission(user);
-        user.roleWithPermission = roleWithPermission;
+        // Create a new account
+        user = await db.User.create({
+          email: rawData.email,
+          username: rawData.username,
+          typeLogin: typeLogin,
+          roleId: localUser ? localUser.roleId : 1,
+        });
+        user = user.get({ plain: true });
       }
+
+      // Get role with permission
+      const roleWithPermission = await JWTService.getRoleWithPermission(user);
+      user.roleWithPermission = roleWithPermission;
+
       return user;
     } catch (error) {
       console.log(">>> check error", error);
