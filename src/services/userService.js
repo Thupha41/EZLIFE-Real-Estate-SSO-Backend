@@ -19,13 +19,23 @@ const hashPassword = async (userPassword) => {
 };
 
 // Creates a new user in the database
-const createNewUser = async (email, password, username) => {
+const createNewUser = async (
+  email,
+  password,
+  first_name,
+  last_name,
+  phone,
+  address
+) => {
   try {
     const hashPass = await hashPassword(password);
     const user = await db.User.create({
       email: email,
       password: hashPass,
-      username: username,
+      first_name: first_name,
+      last_name: last_name,
+      phone: phone,
+      address: address,
     });
     return user;
   } catch (error) {
@@ -49,7 +59,7 @@ const getListUser = async () => {
       model: db.Role,
       attributes: ["name", "description"],
     },
-    attributes: ["id", "username", "email"],
+    attributes: ["id", "first_name", "last_name", "email", "phone", "address"],
     where: { id: 1 },
     raw: true,
     nest: true,

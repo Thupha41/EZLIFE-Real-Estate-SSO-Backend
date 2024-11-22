@@ -7,6 +7,8 @@ services:
     environment:
       - MYSQL_DATABASE=${DB_NAME}
       - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+      - MYSQL_CHARACTER_SET_SERVER=utf8mb4
+      - MYSQL_COLLATION_SERVER=utf8mb4_unicode_ci
     healthcheck:
       test: "mysql -uroot -p$$MYSQL_ROOT_PASSWORD  -e 'SHOW databases'"
       interval: 10s
@@ -16,4 +18,8 @@ services:
       - "${DB_PORT}:3306"
     expose:
       - 3306
+    volumes:
+      - mysql-data:/var/lib/mysql
+volumes:
+  mysql-data:
 #docker compose -p sso-nodejs-mysql -f docker-compose.yml up -d

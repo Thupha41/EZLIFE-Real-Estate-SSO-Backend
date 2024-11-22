@@ -1,7 +1,6 @@
 import AuthService from "../services/auth.service";
 import { OK } from "../core/success.response";
-import { ErrorResponse } from "../core/error.response";
-
+import { ErrorResponse, BadRequestResponse } from "../core/error.response";
 const handleRegister = async (req, res) => {
   try {
     const { email, phone, password } = req.body;
@@ -12,11 +11,11 @@ const handleRegister = async (req, res) => {
       }).send(res);
     }
     if (password && password.length < 4) {
-      return res.status(400).json({
+      throw new BadRequestResponse({
         EM: "Password must be longer than 3 characters", // error message
         EC: "0", // Error code
         DT: "", // data
-      });
+      }).send(res);
     }
     // Service: create user
     let data = await AuthService.register(req.body);
@@ -29,11 +28,12 @@ const handleRegister = async (req, res) => {
     }).send(res);
   } catch (error) {
     console.error("Error in handleRegister:", error);
-    return res.status(500).json({
-      EM: "Error message from server", // error message
-      EC: "-1", // Error code
-      DT: "", // data
-    });
+    if (error instanceof ErrorResponse) {
+      return error.send(res);
+    }
+    return new ErrorResponse({
+      EM: "Error message from server",
+    }).send(res);
   }
 };
 

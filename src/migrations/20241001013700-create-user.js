@@ -13,19 +13,16 @@ module.exports = {
       password: {
         type: Sequelize.STRING,
       },
-      username: {
+      first_name: {
+        type: Sequelize.STRING,
+      },
+      last_name: {
         type: Sequelize.STRING,
       },
       address: {
         type: Sequelize.STRING,
       },
-      sex: {
-        type: Sequelize.STRING,
-      },
       phone: {
-        type: Sequelize.STRING,
-      },
-      fullName: {
         type: Sequelize.STRING,
       },
       roleId: {

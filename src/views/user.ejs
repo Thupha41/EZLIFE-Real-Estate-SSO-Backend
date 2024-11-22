@@ -40,8 +40,25 @@
             />
           </div>
           <div class="mb-3">
-            <label for="username" class="form-label">Username</label>
-            <input type="text" class="form-control" name="username" required />
+            <label for="first_name" class="form-label">First Name</label>
+            <input
+              type="text"
+              class="form-control"
+              name="first_name"
+              required
+            />
+          </div>
+          <div class="mb-3">
+            <label for="last_name" class="form-label">Last Name</label>
+            <input type="text" class="form-control" name="last_name" required />
+          </div>
+          <div class="mb-3">
+            <label for="phone" class="form-label">Phone</label>
+            <input type="text" class="form-control" name="phone" required />
+          </div>
+          <div class="mb-3">
+            <label for="address" class="form-label">Address</label>
+            <input type="text" class="form-control" name="address" required />
           </div>
           <button type="submit" class="btn btn-primary">Submit</button>
         </form>
@@ -55,7 +72,10 @@
             <tr>
               <th scope="col">#</th>
               <th scope="col">Email</th>
-              <th scope="col">Username</th>
+              <th scope="col">FirstName</th>
+              <th scope="col">LastName</th>
+              <th scope="col">Phone</th>
+              <th scope="col">Address</th>
               <th scope="col">Actions</th>
             </tr>
           </thead>
@@ -65,7 +85,10 @@
             <tr>
               <th scope="row"><%= index + 1 %></th>
               <td><%= user.email %></td>
-              <td><%= user.username %></td>
+              <td><%= user.first_name %></td>
+              <td><%= user.last_name %></td>
+              <td><%= user.phone %></td>
+              <td><%= user.address %></td>
               <td>
                 <a class="btn btn-info" href="user/update-user/<%= user.id %>"
                   >Edit</a

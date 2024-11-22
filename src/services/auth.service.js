@@ -80,7 +80,7 @@ class AuthService {
         username: rawUserData.username,
         phone: rawUserData.phone,
         password: hashPassword,
-        roleId: 4,
+        roleId: 2,
       });
       return {
         EM: "A user was created successfully!",
@@ -120,7 +120,10 @@ class AuthService {
       let payload = {
         user_id: user.id,
         roleWithPermission,
-        username: user.username,
+        first_name: user.first_name,
+        last_name: user.last_name,
+        phone: user.phone,
+        address: user.address,
         email: user.email,
         code: code,
       };
@@ -133,7 +136,10 @@ class AuthService {
           user_id: user.id,
           access_token: token,
           roleWithPermission,
-          username: user.username,
+          first_name: user.first_name,
+          last_name: user.last_name,
+          phone: user.phone,
+          address: user.address,
           email: user.email,
           code: code,
         },
@@ -185,9 +191,10 @@ class AuthService {
         // Create a new account
         user = await db.User.create({
           email: rawData.email,
-          username: rawData.username,
+          first_name: rawData.first_name,
+          last_name: rawData.last_name,
           typeLogin: typeLogin,
-          roleId: localUser ? localUser.roleId : 1,
+          roleId: localUser ? localUser.roleId : 2,
         });
         user = user.get({ plain: true });
       }
@@ -218,7 +225,10 @@ class AuthService {
         return {
           user_id: user.id,
           roleWithPermission,
-          username: user.username,
+          first_name: user.first_name,
+          last_name: user.last_name,
+          phone: user.phone,
+          address: user.address,
           email: user.email,
         };
       }

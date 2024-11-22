@@ -31,7 +31,10 @@ const verifySSOToken = async (req, res) => {
       let payload = {
         user_id: req.user.user_id,
         roleWithPermission: req.user.roleWithPermission,
-        username: req.user.username,
+        first_name: req.user.first_name,
+        last_name: req.user.last_name,
+        phone: req.user.phone,
+        address: req.user.address,
         email: req.user.email,
       };
 
@@ -52,7 +55,10 @@ const verifySSOToken = async (req, res) => {
         access_token: token,
         refresh_token: refreshToken,
         email: req.user.email,
-        username: req.user.username,
+        first_name: req.user.first_name,
+        last_name: req.user.last_name,
+        phone: req.user.phone,
+        address: req.user.address,
         roleWithPermission: req.user.roleWithPermission,
       };
 

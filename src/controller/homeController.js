@@ -27,9 +27,9 @@ const getUserPage = async (req, res) => {
   }
 };
 const postCreateUser = async (req, res) => {
-  const { email, password, username } = req.body;
+  const { email, password, first_name, last_name, phone, address } = req.body;
 
-  await createNewUser(email, password, username);
+  await createNewUser(email, password, first_name, last_name, phone, address);
   return res.redirect("/user");
 };
 const handleDeleteUser = async (req, res) => {
@@ -49,9 +49,9 @@ const getEditUserPage = async (req, res) => {
 };
 
 const handleEditUser = async (req, res) => {
-  const { email, username, id } = req.body;
+  const { email, first_name, last_name, phone, address, id } = req.body;
   console.log("Check id: ", req.body.id);
-  await editUser(email, username, id);
+  await editUser(email, first_name, last_name, phone, address, id);
   return res.redirect("/user");
 };
 module.exports = {

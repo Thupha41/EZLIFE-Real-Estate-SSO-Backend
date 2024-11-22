@@ -12,17 +12,13 @@ const configLoginWithGoogle = () => {
         callbackURL: process.env.GOOGLE_CALLBACK_URL,
       },
       async function (accessToken, refreshToken, profile, cb) {
-        //   User.findOrCreate({ googleId: profile.id }, function (err, user) {
-        //     return cb(err, user);
-        //   });
         const typeLogin = "google";
         let rawData = {
           username: profile.displayName,
-          email:
-            profile.emails && profile.emails.length > 0
-              ? profile.emails[0].value
-              : "",
+          email: profile.emails?.[0]?.value || "",
           googleId: profile.id,
+          first_name: profile.name?.givenName,
+          last_name: profile.name?.familyName,
         };
         console.log(">>> checkout profile", profile);
         let user = await AuthService.upsertUserSocialMedia(typeLogin, rawData);

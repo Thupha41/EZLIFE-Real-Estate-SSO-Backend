@@ -23,6 +23,8 @@ const configLoginWithFacebook = () => {
             username: profile.displayName,
             email: profile.emails?.[0]?.value || `${profile.id}@facebook.com`,
             facebookId: profile.id,
+            first_name: profile.name.givenName,
+            last_name: profile.name.familyName,
           };
 
           let user = await AuthService.upsertUserSocialMedia(
