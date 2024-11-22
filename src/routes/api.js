@@ -1,6 +1,10 @@
 import express from "express";
 import permissionRoutes from "./permission/permission.routes";
-import { checkUserJWT, checkUserPermission } from "../middleware/JWTAction";
+import {
+  checkUserJWT,
+  checkUserPermission,
+  checkServicesJWT,
+} from "../middleware/JWTAction";
 import authRoutes from "./auth/auth.routes";
 import roleRoutes from "./role/role.routes";
 import userRoutes from "./user/user.routes";
@@ -10,8 +14,8 @@ const router = express.Router();
 const initApiRoute = (app) => {
   router.all("*", checkUserJWT, checkUserPermission);
 
-  //service route
-
+  //check services JWT
+  router.post("/verify-services-jwt", checkServicesJWT);
   //auth route
   router.use("/auth", authRoutes);
 

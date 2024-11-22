@@ -120,8 +120,11 @@ const getUserAccount = (req, res) => {
       user_id: req.user.user_id,
       access_token: req.user.access_token,
       refresh_token: req.user.refresh_token,
-      username: req.user.username,
+      first_name: req.user.first_name,
+      last_name: req.user.last_name,
       email: req.user.email,
+      phone: req.user.phone,
+      address: req.user.address,
       roleWithPermission: req.user.roleWithPermission,
     },
   }).send(res);

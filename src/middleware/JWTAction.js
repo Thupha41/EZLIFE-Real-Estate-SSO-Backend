@@ -4,10 +4,13 @@ import { v4 as uuidv4 } from "uuid";
 import AuthService from "../services/auth.service";
 let key = process.env.JWT_SECRET;
 const nonSecurePaths = [
+  "/logout",
   "/auth/logout",
   "/auth/register",
   "/auth/login",
   "/users/search",
+  "/verify-services-jwt",
+  "/auth/verify-services-jwt",
 ];
 const createToken = (payload) => {
   let token = null;
@@ -157,7 +160,10 @@ const handleRefreshToken = async (refreshToken) => {
     let payloadAccessToken = {
       user_id: user.user_id,
       roleWithPermission: user.roleWithPermission,
-      username: user.username,
+      first_name: user.first_name,
+      last_name: user.last_name,
+      phone: user.phone,
+      address: user.address,
       email: user.email,
     };
 
@@ -172,10 +178,40 @@ const handleRefreshToken = async (refreshToken) => {
     newRefreshToken,
   };
 };
+const checkServicesJWT = async (req, res, next) => {
+  //extract token from header
+  const tokenFromHeader = extractToken(req);
+  if (tokenFromHeader) {
+    let access_token = tokenFromHeader;
+    let decoded = verifyToken(access_token);
+    console.log(">>> check decoded", decoded);
+    if (decoded) {
+      return res.status(200).json({
+        EC: 1,
+        EM: "Verify services JWT successfully",
+        DT: "",
+      });
+    } else {
+      return res.status(401).json({
+        EC: -1,
+        EM: "User not authenticated",
+        DT: "",
+      });
+    }
+  } else {
+    return res.status(401).json({
+      EC: -1,
+      EM: "User not authenticated",
+      DT: "",
+    });
+  }
+};
 
 module.exports = {
   createToken,
   verifyToken,
   checkUserJWT,
   checkUserPermission,
+  checkServicesJWT,
+  extractToken,
 };

@@ -26,7 +26,14 @@ class UserService {
   static getAll = async () => {
     try {
       let users = await db.User.findAll({
-        attributes: ["id", "username", "email", "phone", "sex"],
+        attributes: [
+          "id",
+          "first_name",
+          "last_name",
+          "email",
+          "phone",
+          "address",
+        ],
         include: {
           model: db.Role,
           attributes: ["name", "description", "id"],
