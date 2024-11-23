@@ -14,6 +14,50 @@ const router = express.Router();
 const initApiRoute = (app) => {
   router.all("*", checkUserJWT, checkUserPermission);
 
+  /**
+   * @swagger
+   * /verify-services-jwt:
+   *   post:
+   *     tags:
+   *       - Services
+   *     summary: Verify services JWT
+   *     description: Validates a JWT token from the Authorization header (Bearer token)
+   *     security:
+   *       - BearerAuth: []
+   *     responses:
+   *       '200':
+   *         description: JWT verified successfully
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 EC:
+   *                   type: integer
+   *                   example: 1
+   *                 EM:
+   *                   type: string
+   *                   example: "Verify services JWT successfully"
+   *                 DT:
+   *                   type: string
+   *                   example: ""
+   *       '401':
+   *         description: Authentication failed
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 EC:
+   *                   type: integer
+   *                   example: -1
+   *                 EM:
+   *                   type: string
+   *                   example: "User not authenticated"
+   *                 DT:
+   *                   type: string
+   *                   example: ""
+   */
   //check services JWT
   router.post("/verify-services-jwt", checkServicesJWT);
   //auth route

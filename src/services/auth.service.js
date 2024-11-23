@@ -7,6 +7,7 @@ const crypto = require("crypto");
 const {
   UnauthorizedResponse,
   ErrorResponse,
+  ConflictRequestError,
 } = require("../core/error.response");
 import { v4 as uuidv4 } from "uuid";
 
@@ -50,25 +51,27 @@ class AuthService {
   static register = async (rawUserData) => {
     try {
       // Step 1: Check email/phone number already existed
-      let user = await this.checkUserExists(
-        rawUserData.email,
-        rawUserData.phone
-      );
-      if (user) {
-        if (user.email === rawUserData.email) {
-          return {
-            EC: -1,
-            EM: "The email is already existed!",
-            DT: "email",
-          };
-        }
-        if (user.phone === rawUserData.phone) {
-          return {
-            EC: -1,
-            EM: "The phone number is already existed!",
-            DT: "phone",
-          };
-        }
+      let userByEmail = await db.User.findOne({
+        where: { email: rawUserData.email },
+        raw: true,
+      });
+
+      if (userByEmail) {
+        throw new ConflictRequestError({
+          EM: "The email is already existed!",
+          DT: "email",
+        });
+      }
+      let userByPhone = await db.User.findOne({
+        where: { phone: rawUserData.phone },
+        raw: true,
+      });
+
+      if (userByPhone) {
+        throw new ConflictRequestError({
+          EM: "The phone number is already existed!",
+          DT: "phone",
+        });
       }
 
       //Step 2: hash user password
@@ -77,22 +80,27 @@ class AuthService {
       //Step 3: create new user
       await db.User.create({
         email: rawUserData.email,
-        username: rawUserData.username,
+        first_name: rawUserData.first_name,
+        last_name: rawUserData.last_name,
         phone: rawUserData.phone,
+        address: rawUserData.address,
         password: hashPassword,
         roleId: 2,
+        typeLogin: "local",
       });
       return {
-        EM: "A user was created successfully!",
+        EM: "A user was registered successfully!",
         EC: 1,
         DT: "",
       };
     } catch (error) {
       console.log(error);
-      return {
-        EM: "Something wrong with user service!",
-        EC: -1,
-      };
+      if (error instanceof ErrorResponse) {
+        throw error;
+      }
+      throw new ErrorResponse({
+        EM: "Something wrong with create register service!",
+      });
     }
   };
 

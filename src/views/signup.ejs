@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SSO Sign Up</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Poppins"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  </head>
+  <style>
+    :root {
+      --primary-color: #2563eb;
+      --secondary-color: #64748b;
+      --danger-color: #dc2626;
+      --success-color: #16a34a;
+      --background-color: #f8fafc;
+      --card-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1),
+        0 2px 4px -2px rgb(0 0 0 / 0.1);
+    }
+    body {
+      font-family: "Poppins", sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      background-color: var(--background-color);
+      color: #334155;
+    }
+    .card {
+      border: none;
+      border-radius: 16px;
+      box-shadow: var(--card-shadow);
+      background: white;
+      transition: transform 0.2s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-2px);
+    }
+    .card-body {
+      padding: 2.5rem;
+    }
+    .btn-back {
+      padding: 0.5rem 0;
+      color: var(--secondary-color) !important;
+      transition: color 0.2s ease;
+    }
+
+    .btn-back:hover {
+      color: var(--primary-color) !important;
+    }
+
+    .bi-google {
+      font-size: 24px;
+      color: #ea4335;
+    }
+    .bi-facebook {
+      font-size: 24px;
+      color: #1877f2;
+    }
+
+    .card-title {
+      font-size: 2rem;
+      font-weight: 600;
+      color: #1e293b;
+    }
+
+    .form-label {
+      font-weight: 500;
+      color: #475569;
+      margin-bottom: 0.5rem;
+    }
+
+    .form-control {
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      border: 1px solid #e2e8f0;
+      font-size: 0.95rem;
+      transition: all 0.2s ease;
+    }
+
+    .form-control:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+
+    .input-group .btn {
+      border-top-right-radius: 8px;
+      border-bottom-right-radius: 8px;
+    }
+    /* .login-container {
+      padding-top: 20px;
+    } */
+    .none-error-message {
+      display: none;
+    }
+    .form-control.is-invalid {
+      border-color: #dc3545;
+      background-image: none;
+    }
+
+    .alert {
+      transition: all 0.3s ease-in-out;
+    }
+
+    .none-error-message {
+      display: none;
+      opacity: 0;
+    }
+
+    /* Add password toggle button styles */
+    #togglePassword {
+      cursor: pointer;
+    }
+
+    #togglePassword:hover {
+      background-color: #e9ecef;
+    }
+
+    /* Add shake animation for errors */
+    @keyframes shake {
+      0%,
+      100% {
+        transform: translateX(0);
+      }
+      10%,
+      30%,
+      50%,
+      70%,
+      90% {
+        transform: translateX(-5px);
+      }
+      20%,
+      40%,
+      60%,
+      80% {
+        transform: translateX(5px);
+      }
+    }
+
+    .shake {
+      animation: shake 0.6s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+    }
+
+    /* Add to your existing styles */
+    hr {
+      position: relative;
+      border: none;
+      height: 1px;
+      background: #333;
+      margin: 20px 0;
+    }
+
+    #btn-login {
+      padding: 0.75rem;
+      font-weight: 500;
+      border-radius: 8px;
+      background-color: var(--primary-color);
+      border: none;
+      transition: all 0.2s ease;
+    }
+
+    #btn-login:hover {
+      background-color: #1d4ed8;
+      transform: translateY(-1px);
+    }
+
+    .text-danger {
+      color: var(--danger-color) !important;
+    }
+
+    hr {
+      border-color: #e2e8f0;
+      opacity: 0.2;
+    }
+
+    /* Social login buttons */
+    .social-login {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+    }
+
+    .social-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background-color: #f8fafc;
+      transition: all 0.2s ease;
+    }
+
+    .bi-google {
+      font-size: 24px;
+      color: #ea4335;
+    }
+
+    .bi-facebook {
+      font-size: 24px;
+      color: #1877f2;
+    }
+
+    .social-btn:hover {
+      transform: translateY(-2px);
+      background-color: #f1f5f9;
+    }
+
+    /* Alert styles */
+    .alert {
+      border-radius: 8px;
+      font-size: 0.9rem;
+      padding: 1rem;
+    }
+
+    /* Image container */
+    .login-image-container {
+      position: relative;
+      height: 100%;
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    .login-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 16px;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .card-body {
+        padding: 1.5rem;
+      }
+
+      .card-title {
+        font-size: 1.75rem;
+      }
+    }
+
+    /* Animation for form elements */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .form-group {
+      animation: fadeIn 0.5s ease forwards;
+    }
+
+    .form-group:nth-child(2) {
+      animation-delay: 0.1s;
+    }
+
+    .form-group:nth-child(3) {
+      animation-delay: 0.2s;
+    }
+
+    .form-row {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .form-row > div {
+      flex: 1;
+    }
+
+    @media (max-width: 576px) {
+      .form-row {
+        flex-direction: column;
+        gap: 0;
+      }
+    }
+  </style>
+
+  <script>
+    $(document).ready(function () {
+      function showError(message) {
+        $("#error-message")
+          .removeClass("none-error-message")
+          .removeClass("alert-success")
+          .addClass("alert-danger")
+          .html(message);
+      }
+
+      function validateForm() {
+        const firstName = $("#firstName").val().trim();
+        const lastName = $("#lastName").val().trim();
+        const email = $("#email").val().trim();
+        const password = $("#password").val().trim();
+        const phone = $("#phone").val().trim();
+        const address = $("#address").val().trim();
+
+        $("#error-message").addClass("none-error-message");
+
+        if (!firstName || !lastName) {
+          showError("Please enter your full name");
+          return false;
+        }
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!email || !emailRegex.test(email)) {
+          showError("Please enter a valid email address");
+          return false;
+        }
+
+        if (!password || password.length < 4) {
+          showError("Password must be at least 4 characters long");
+          return false;
+        }
+
+        const phoneRegex = /^\d{10}$/;
+        if (!phone || !phoneRegex.test(phone)) {
+          showError("Please enter a valid 10-digit phone number");
+          return false;
+        }
+
+        if (!address) {
+          showError("Please enter your address");
+          return false;
+        }
+
+        return true;
+      }
+
+      $("#btn-signup").on("click", function () {
+        if (!validateForm()) return;
+
+        $.ajax({
+          type: "POST",
+          url: "/api/v1/auth/register",
+          data: {
+            firstName: $("#firstName").val().trim(),
+            lastName: $("#lastName").val().trim(),
+            email: $("#email").val().trim(),
+            password: $("#password").val(),
+            phone: $("#phone").val().trim(),
+            address: $("#address").val().trim(),
+          },
+          success: function (response) {
+            $("#error-message")
+              .removeClass("none-error-message")
+              .removeClass("alert-danger")
+              .addClass("alert-success")
+              .html("Registration successful! Redirecting to login...");
+
+            setTimeout(() => {
+              window.location.href = `${window.location.origin}/login?serviceURL=<%= process.env.REACT_PATH_SSO %>`;
+            }, 2000);
+          },
+          error: function (xhr) {
+            // Extract the error message from the response
+            const errorResponse = xhr.responseJSON;
+            const errorMessage =
+              errorResponse?.EM || "Registration failed. Please try again.";
+            showError(errorMessage);
+          },
+        });
+      });
+
+      $(".btn-back").on("click", function () {
+        window.location.href = `${window.location.origin}/login?serviceURL=<%= process.env.REACT_PATH_SSO %>`;
+      });
+    });
+  </script>
+
+  <body>
+    <div class="container min-vh-100 d-flex align-items-center py-5">
+      <div class="row w-100 g-0">
+        <div class="col-md-6 mx-auto">
+          <div class="card">
+            <div class="card-body">
+              <button class="btn btn-link btn-back mb-4">
+                <img
+                  src="/images/back.png"
+                  alt="Back"
+                  class="me-2"
+                  style="width: 20px"
+                />
+                <span>Back to Login</span>
+              </button>
+
+              <h2 class="card-title mb-3">Create Account</h2>
+              <p class="text-muted mb-4">Join EZLIFE Real Estate today</p>
+
+              <form id="signupForm" novalidate>
+                <div
+                  class="alert alert-danger my-3 none-error-message"
+                  role="alert"
+                  id="error-message"
+                ></div>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="firstName" class="form-label">First Name</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="firstName"
+                      placeholder="Enter first name"
+                      required
+                    />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="lastName" class="form-label">Last Name</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="lastName"
+                      placeholder="Enter last name"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div class="form-group mb-4">
+                  <label for="email" class="form-label">Email Address</label>
+                  <input
+                    type="email"
+                    class="form-control"
+                    id="email"
+                    placeholder="Enter your email address"
+                    required
+                  />
+                </div>
+
+                <div class="form-group mb-4">
+                  <label for="password" class="form-label">Password</label>
+                  <input
+                    type="password"
+                    class="form-control"
+                    id="password"
+                    placeholder="Create a password"
+                    required
+                  />
+                </div>
+
+                <div class="form-group mb-4">
+                  <label for="phone" class="form-label">Phone Number</label>
+                  <input
+                    type="tel"
+                    class="form-control"
+                    id="phone"
+                    placeholder="Enter your phone number"
+                    required
+                  />
+                </div>
+
+                <div class="form-group mb-4">
+                  <label for="address" class="form-label">Address</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="address"
+                    placeholder="Enter your address"
+                    required
+                  />
+                </div>
+
+                <button
+                  id="btn-signup"
+                  type="button"
+                  class="btn btn-primary w-100 mb-4"
+                >
+                  Create Account
+                </button>
+
+                <p class="text-center text-muted mb-0">
+                  Already have an account?
+                  <a
+                    href="/login?serviceURL=<%= process.env.REACT_PATH_SSO %>"
+                    class="text-primary text-decoration-none fw-bold"
+                    >Sign in</a
+                  >
+                </p>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 d-none d-md-block">
+          <div class="login-image-container">
+            <img
+              src="/images/LoginImage.jpg"
+              alt="Signup illustration"
+              class="login-image"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

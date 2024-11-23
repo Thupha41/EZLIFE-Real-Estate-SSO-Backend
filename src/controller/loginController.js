@@ -294,6 +294,10 @@ const handleResetPassword = async (req, res) => {
   }
 };
 
+const getSignupPage = (req, res) => {
+  return res.render("signup.ejs");
+};
+
 module.exports = {
   getLoginPage,
   verifySSOToken,
@@ -304,4 +308,5 @@ module.exports = {
   handleVerifyForgotCode,
   resendCode,
   handleResetPassword,
+  getSignupPage,
 };
