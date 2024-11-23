@@ -4,10 +4,11 @@ const allowedOrigins = [
   process.env.REACT_PATH,
   process.env.REACT_PATH_SSO,
   process.env.SERVICE_PATH,
-  "0.0.0.0:8080",
-  "0.0.0.0:8080/api/v1",
-  "127.0.0.1:8080",
-  "localhost:8080",
+  process.env.DOCKER_SSO_PATH,
+  process.env.DOCKER_SSO_PATH + "/api/v1",
+  process.env.HOST_NAME + ":" + process.env.PORT,
+  process.env.PUBLIC_SSO_PATH,
+  process.env.PUBLIC_SSO_PATH + "/api/v1",
 ];
 
 module.exports = allowedOrigins;
