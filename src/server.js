@@ -27,11 +27,11 @@ const options = {
     },
     servers: [
       {
-        url: `http://localhost:8080/api/v1`,
+        url: `http://${process.env.HOST_NAME}:${process.env.PORT}/api/v1`,
         description: "Development server",
       },
       {
-        url: `http://localhost:8080/`,
+        url: `http://${process.env.HOST_NAME}:${process.env.PORT}`,
         description: "Development server",
       },
     ],
