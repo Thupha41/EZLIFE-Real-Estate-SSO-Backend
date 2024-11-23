@@ -27,11 +27,11 @@ const options = {
     },
     servers: [
       {
-        url: "http://localhost:8080/api/v1",
+        url: `http://localhost:8080/api/v1`,
         description: "Development server",
       },
       {
-        url: "http://localhost:8080/",
+        url: `http://localhost:8080/`,
         description: "Development server",
       },
     ],
@@ -232,7 +232,13 @@ configViewEngine(app);
 //config req.body
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(openapiSpecification));
+app.use(
+  "/api/docs",
+  swaggerUi.serve,
+  swaggerUi.setup(openapiSpecification, {
+    customSiteTitle: "EZLIFE Real Estate SSO API",
+  })
+);
 //config cookie parse
 app.use(cookieParser());
 
@@ -248,6 +254,6 @@ initApiRoute(app);
 configPassport();
 configLoginWithGoogle();
 configLoginWithFacebook();
-app.listen(port, hostname, () => {
+app.listen(port, "0.0.0.0", () => {
   console.log(`Server running on port ${port}`);
 });

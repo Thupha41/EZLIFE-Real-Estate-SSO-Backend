@@ -1,5 +1,5 @@
-#prepare nodejs environment 16/alpine
-FROM node:16.20.2-alpine
+#prepare nodejs environment 18/alpine
+FROM node:18-alpine
 
 #Define directory in Docker
 WORKDIR /sso-api/backend
@@ -23,6 +23,3 @@ COPY . .
 RUN npm run build-src
 # Use the script with full path
 CMD ["/bin/sh", "-c", "/scripts/wait-for.sh db-mysql-sso 3306 -- npm run migrate:up && npm run build"]
-
-#docker build --tag node-scm-docker .
-#docker run -p 8080:8080 -d node-scm-docker
