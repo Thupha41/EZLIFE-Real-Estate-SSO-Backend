@@ -19,7 +19,32 @@ services:
     expose:
       - 3306
     volumes:
-      - mysql-data:/var/lib/mysql
+      - mysql-data-sso:/var/lib/mysql
+    networks:
+      - sso-network
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    depends_on:
+      - db-mysql-sso
+    environment:
+      - DB_PORT=3306
+      - DB_HOST=db-mysql-sso
+    ports:
+      - ${PORT}:${PORT}
+    env_file:
+      - .env
+    volumes:
+      - ./src:/sso-api/backend/src
+      - ./package.json:/sso-api/backend/package.json
+    networks:
+      - sso-network
 volumes:
-  mysql-data:
-#docker compose -p sso-nodejs-mysql -f docker-compose.yml up -d
+  mysql-data-sso:
+
+networks:
+  sso-network:
+    driver: bridge
+#docker compose up -d --build

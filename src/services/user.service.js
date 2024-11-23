@@ -33,6 +33,7 @@ class UserService {
           "email",
           "phone",
           "address",
+          "typeLogin",
         ],
         include: {
           model: db.Role,
@@ -69,7 +70,9 @@ class UserService {
       const { count, rows } = await db.User.findAndCountAll({
         offset: offset,
         limit: limit,
-        exclude: ["password", "refreshToken"],
+        attributes: {
+          exclude: ["password", "refreshToken"],
+        },
         order: [["id", "DESC"]],
         include: {
           model: db.Role,
@@ -230,11 +233,10 @@ class UserService {
             [Op.or]: [
               { id: { [Op.like]: `%${searchQuery}%` } },
               { email: { [Op.like]: `%${searchQuery}%` } },
-              { username: { [Op.like]: `%${searchQuery}%` } },
+              { first_name: { [Op.like]: `%${searchQuery}%` } },
+              { last_name: { [Op.like]: `%${searchQuery}%` } },
               { address: { [Op.like]: `%${searchQuery}%` } },
               { phone: { [Op.like]: `%${searchQuery}%` } },
-              { sex: { [Op.like]: `%${searchQuery}%` } },
-              { fullname: { [Op.like]: `%${searchQuery}%` } },
               { "$Role.name$": { [Op.like]: `%${searchQuery}%` } },
             ],
           }

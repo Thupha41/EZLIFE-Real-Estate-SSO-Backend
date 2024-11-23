@@ -1,0 +1,1161 @@
+openapi: 3.0.0
+info:
+  title: EZLIFE Real Estate SSO API
+  version: 1.0.0
+  description: API documentation for EZLIFE Real Estate SSO Backend
+
+servers:
+  - url: http://localhost:8080/api/v1
+    description: Default API server
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: char(36)
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          writeOnly: true
+        first_name:
+          type: string
+        last_name:
+          type: string
+        address:
+          type: string
+        phone:
+          type: string
+        roleId:
+          type: integer
+          format: int11
+        typeLogin:
+          type: string
+        refreshToken:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+          
+    Role:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int11
+        name:
+          type: string
+        description:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+            
+    Permission:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int11
+        url:
+          type: string
+        description:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    ResetPasswordToken:
+      type: object
+      properties:
+        id:
+          type: string
+          format: char(36)
+        userId:
+          type: string
+          format: char(36)
+        verifyToken:
+          type: string
+        consumed:
+          type: integer
+          format: tinyint
+          default: 0
+        expired:
+          type: integer
+          format: tinyint
+          default: 0
+        expirationDate:
+          type: string
+          format: date-time
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+  responses:
+    BadRequestError:
+      description: Bad request - validation error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              EC:
+                type: integer
+                example: -1
+
+paths:
+  /auth/register:
+    post:
+      tags:
+        - Authentication
+      summary: Register a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - first_name
+                - last_name
+                - phone
+                - address
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: "user@example.com"
+                first_name:
+                  type: string
+                  example: "John"
+                last_name:
+                  type: string
+                  example: "Doe"
+                phone:
+                  type: string
+                  example: "+1234567890"
+                address:
+                  type: string
+                  example: "123 Main St, City"
+      responses:
+        '200':
+          description: User registered successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  EC:
+                    type: integer
+                    example: 1
+                  EM:
+                    type: string
+                    example: "Register user succeed"
+                  DT:
+                    $ref: '#/components/schemas/User'
+        '409':
+          description: Conflict - email or phone number already exists
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  EC:
+                    type: integer
+                    example: -1
+                  EM:
+                    type: string
+                    oneOf:
+                      - example: "Email already exists"
+                      - example: "Phone number already exists"
+                  DT:
+                    type: object
+
+  /auth/login:
+    post:
+      tags:
+        - Authentication
+      summary: Login user
+      description: Authenticate user with email/password and return tokens
+      operationId: login
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - valueLogin
+                - password
+              properties:
+                valueLogin:
+                  type: string
+                  description: User email address
+                  example: username@gmail.com
+                password:
+                  type: string
+                  format: password
+                  description: User password
+                  example: "1234"
+      responses:
+        '200':
+          description: Successful login
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  EC:
+                    type: integer
+                    example: 1
+                  EM:
+                    type: string
+                    example: "Login successfully"
+                  DT:
+                    type: object
+                    properties:
+                      user_id:
+                        type: string
+                        format: char(36)
+                      access_token:
+                        type: string
+                      roleWithPermission:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                          name:
+                            type: string
+                          description:
+                            type: string
+                          permissions:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                id:
+                                  type: integer
+                                url:
+                                  type: string
+                                description:
+                                  type: string
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+
+  /auth/logout:
+    post:
+      tags:
+        - Authentication
+      summary: Logout user
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Logout successful
+
+  /users/read:
+    get:
+      tags:
+        - Users
+      summary: Get list of users
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+          description: Page number
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 10
+          description: Number of items per page
+      responses:
+        '200':
+          description: List of users retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  totalRows:
+                    type: integer
+                    example: 4
+                  totalPages:
+                    type: integer
+                    example: 1
+                  users:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/User'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  EC:
+                    type: integer
+                    example: -1
+                  EM:
+                    type: string
+                    example: "You don't have permission to access this resource!"
+                  DT:
+                    type: string
+                    example: ""
+
+  /users/create:
+    post:
+      tags:
+        - Users
+      summary: Create a new user
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - first_name
+                - last_name
+                - phone
+                - address
+                - roleId
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: "user@example.com"
+                first_name:
+                  type: string
+                  example: "John"
+                last_name:
+                  type: string
+                  example: "Doe"
+                phone:
+                  type: string
+                  example: "+1234567890"
+                address:
+                  type: string
+                  example: "123 Main St, City"
+                roleId:
+                  type: integer
+                  example: integer
+      responses:
+        '200':
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  EC:
+                    type: integer
+                    example: 1
+                  EM:
+                    type: string
+                    example: "Create user succeed"
+                  DT:
+                    $ref: '#/components/schemas/User'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  EC:
+                    type: integer
+                    example: -1
+                  EM:
+                    type: string
+                    example: "You don't have permission to access this resource!"
+                  DT:
+                    type: string
+                    example: ""
+        '409':
+          description: Conflict - email or phone number already exists
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  EC:
+                    type: integer
+                    example: -1
+                  EM:
+                    type: string
+                    oneOf:
+                      - example: "Email already exists"
+                      - example: "Phone number already exists"
+                  DT:
+                    type: object
+
+  /users/update/{id}:
+    put:
+      tags:
+        - Users
+      summary: Update user by ID
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: User updated successfully
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  EC:
+                    type: integer
+                    example: -1
+                  EM:
+                    type: string
+                    example: "You don't have permission to access this resource!"
+                  DT:
+                    type: string
+                    example: ""
+  /users/delete/{id}:
+    delete:
+      tags:
+        - Users
+      summary: Delete user by ID
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: User deleted successfully
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  EC:
+                    type: integer
+                    example: -1
+                  EM:
+                    type: string
+                    example: "You don't have permission to access this resource!"
+                  DT:
+                    type: string
+                    example: ""   
+  /users/search:
+    get:
+      tags:
+        - Users
+      summary: Search users
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: query
+          name: searchQuery
+          schema:
+            type: string
+          required: true
+          description: Search term to filter users
+      responses:
+        '200':
+          description: Successful search
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  EC:
+                    type: integer
+                  EM:
+                    type: string
+                  DT:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/User'
+        '404':
+          description: No users found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  EC:
+                    type: integer
+                    example: -1
+                  EM:
+                    type: string
+                    example: "No query users found"
+                  DT:
+                    type: object
+                    example: {}
+
+  /users/account:
+    get:
+      tags:
+        - Users
+      summary: Get user account details
+      description: Retrieve authenticated user's account information
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successfully retrieved user account details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  EC:
+                    type: integer
+                    example: 1
+                  EM:
+                    type: string
+                    example: "get user detail successfully"
+                  DT:
+                    type: object
+                    properties:
+                      user_id:
+                        type: string
+                        format: char(36)
+                        example: "string"
+                      access_token:
+                        type: string
+                      first_name:
+                        type: string
+                        example: "Ngo"
+                      last_name:
+                        type: string
+                        example: "Phat"
+                      email:
+                        type: string
+                        example: "username@gmail.com"
+                      phone:
+                        type: string
+                        example: "0399245850"
+                      address:
+                        type: string
+                        example: "67 Hoang Hoa Tham"
+                      roleWithPermission:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                            example: 2
+                          name:
+                            type: string
+                            example: "employee"
+                          description:
+                            type: string
+                            example: "Employee"
+                          permissions:
+                            type: array
+                            items:
+                              $ref: '#/components/schemas/Permission'
+        '401':
+          description: Unauthorized - Invalid or missing token  
+
+  /users/bulk-delete:
+    delete:
+      tags:
+        - Users
+      summary: Delete multiple users
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ids:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '200':
+          description: Users deleted successfully
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  EC:
+                    type: integer
+                    example: -1
+                  EM:
+                    type: string
+                    example: "You don't have permission to access this resource!"
+                  DT:
+                    type: string
+                    example: ""
+
+  /roles/read:
+    get:
+      tags:
+        - Roles
+      summary: Get all roles
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Successfully retrieved roles
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  EC:
+                    type: integer
+                    example: 1
+                  EM:
+                    type: string
+                    example: "get list roles"
+                  DT:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        name:
+                          type: string
+                        description:
+                          type: string
+                    example:
+                      - id: integer
+                        name: string
+                        description: string
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  EC:
+                    type: integer
+                    example: -1
+                  EM:
+                    type: string
+                    example: "You don't have permission to access this resource!"
+                  DT:
+                    type: string
+                    example: ""   
+  /roles/create:
+    post:
+      tags:
+        - Roles
+      summary: Create a new role
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - description
+              properties:
+                name:
+                  type: string
+                  example: "string"
+                description:
+                  type: string
+                  example: "string"
+      responses:
+        '200':
+          description: Role created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  EC:
+                    type: integer
+                  EM:
+                    type: string
+                  DT:
+                    $ref: '#/components/schemas/Role'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  EC:
+                    type: integer
+                    example: -1
+                  EM:
+                    type: string
+                    example: "You don't have permission to access this resource!"
+                  DT:
+                    type: string
+                    example: ""
+
+  /roles/update/{id}:
+    put:
+      tags:
+        - Roles
+      summary: Update role by ID
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Role updated successfully
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  EC:
+                    type: integer
+                    example: -1
+                  EM:
+                    type: string
+                    example: "You don't have permission to access this resource!"
+                  DT:
+                    type: string
+                    example: ""
+  /roles/delete/{id}:
+    delete:
+      tags:
+        - Roles
+      summary: Delete role by ID
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Role deleted successfully
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  EC:
+                    type: integer
+                    example: -1
+                  EM:
+                    type: string
+                    example: "You don't have permission to access this resource!"
+                  DT:
+                    type: string
+                    example: ""
+  /roles/{id}/permissions:
+    get:
+      tags:
+        - Roles
+      summary: Get permissions for a specific role
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: Role ID
+      responses:
+        '200':
+          description: Successfully retrieved role permissions
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  EC:
+                    type: integer
+                    example: 1
+                  EM:
+                    type: string
+                    example: "Get permissions by role successfully"
+                  DT:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      name:
+                        type: string
+                      description:
+                        type: string
+                      Permissions:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                            url:
+                              type: string
+                            description:
+                              type: string
+                    example:
+                      id: integer
+                      name: string
+                      description: string
+                      Permissions:
+                        - id: integer
+                          url: string
+                          description: string
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  EC:
+                    type: integer
+                    example: -1
+                  EM:
+                    type: string
+                    example: "You don't have permission to access this resource!"
+                  DT:
+                    type: string
+                    example: ""
+  /permissions/read:
+    get:
+      tags:
+        - Permissions
+      summary: Get paginated list of permissions
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+          required: true
+          description: Page number
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            minimum: 1
+            default: 10
+          required: true
+          description: Number of items per page
+      responses:
+        '200':
+          description: Successfully retrieved permissions list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  EC:
+                    type: integer
+                    example: 1
+                  EM:
+                    type: string
+                    example: "Get list permissions at page 1, limit 10"
+                  DT:
+                    type: object
+                    properties:
+                      totalRows:
+                        type: integer
+                        example: integer
+                      totalPages:
+                        type: integer
+                        example: integer
+                      permissions:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                            url:
+                              type: string
+                            description:
+                              type: string
+                        example:
+                          - id: integer
+                            url: string
+                            description: string
+                          - id: integer
+                            url: string
+                            description: string
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  EC:
+                    type: integer
+                    example: -1
+                  EM:
+                    type: string
+                    example: "You don't have permission to access this resource!"
+                  DT:
+                    type: string
+                    example: ""   
+  /permissions/create:
+    post:
+      tags:
+        - Permissions
+      summary: Create a new permission
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - url
+                - description
+              properties:
+                url:
+                  type: string
+
+                description:
+                  type: string
+
+      responses:
+        '201':
+          description: Permission created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  EC:
+                    type: integer
+                    example: 1
+                  EM:
+                    type: string
+                    example: "Create permission successfully"
+                  DT:
+                    $ref: '#/components/schemas/Permission'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  EC:
+                    type: integer
+                    example: -1
+                  EM:
+                    type: string
+                    example: "You don't have permission to access this resource!"
+                  DT:
+                    type: string
+                    example: ""  
+
+  /permissions/assign-to-role:
+    post:
+      tags:
+        - Permissions
+      summary: Assign permissions to a role
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - data
+              properties:
+                data:
+                  type: object
+                  required:
+                    - roleId
+                    - rolePermissions
+                  properties:
+                    roleId:
+                      type: integer
+                      example: integer
+                    rolePermissions:
+                      type: array
+                      items:
+                        type: object
+                        required:
+                          - permissionId
+                        properties:
+                          permissionId:
+                            type: integer
+                      example:
+                        - permissionId: integer
+                        - permissionId: integer
+                        - permissionId: integer
+                        - permissionId: integer
+                        - permissionId: integer
+                        - permissionId: integer
+      responses:
+        '200':
+          description: Permission assigned successfully
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  EC:
+                    type: integer
+                    example: -1
+                  EM:
+                    type: string
+                    example: "You don't have permission to access this resource!"
+                  DT:
+                    type: string
+                    example: ""  
+  /permissions/update/{id}:
+    put:
+      tags:
+        - Permissions
+      summary: Update permission by ID
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Permission updated successfully
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  EC:
+                    type: integer
+                    example: -1
+                  EM:
+                    type: string
+                    example: "You don't have permission to access this resource!"
+                  DT:
+                    type: string
+                    example: ""  
+  /permissions/delete/{id}:
+    delete:
+      tags:
+        - Permissions
+      summary: Delete permission by ID
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Permission deleted successfully
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  EC:
+                    type: integer
+                    example: -1
+                  EM:
+                    type: string
+                    example: "You don't have permission to access this resource!"
+                  DT:
+                    type: string
+                    example: ""  
+
+  /verify-services-jwt:
+    post:
+      tags:
+        - Services
+      summary: Verify services JWT
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                token:
+                  type: string
+      responses:
+        '200':
+          description: JWT verified successfully
+

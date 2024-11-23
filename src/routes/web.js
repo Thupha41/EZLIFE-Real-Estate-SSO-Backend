@@ -84,6 +84,223 @@ router.get(
   }
 );
 
+router.get("/signup", loginController.getSignupPage);
+/**
+ * @swagger
+ * /send-code:
+ *   post:
+ *     tags:
+ *       - Password Reset
+ *     summary: Send reset password code
+ *     description: Sends a verification code to user's email
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *                 example: "user@example.com"
+ *     responses:
+ *       '200':
+ *         description: Code sent successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 EC:
+ *                   type: integer
+ *                   example: 0
+ *                 EM:
+ *                   type: string
+ *                   example: "Code sent successfully"
+ *                 DT:
+ *                   type: object
+ *                   properties:
+ *                     email:
+ *                       type: string
+ *                       example: "user@example.com"
+ *       '401':
+ *         description: Email not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 EC:
+ *                   type: integer
+ *                   example: -1
+ *                 EM:
+ *                   type: string
+ *                   example: "Email user@example.com not found"
+ *
+ * /resend-code:
+ *   post:
+ *     tags:
+ *       - Password Reset
+ *     summary: Resend verification code
+ *     description: Resends the verification code to user's email
+ *     responses:
+ *       '200':
+ *         description: Code resent successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 EC:
+ *                   type: integer
+ *                   example: 0
+ *                 EM:
+ *                   type: string
+ *                   example: "Code resent successfully"
+ *       '500':
+ *         description: Error resending code
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 EC:
+ *                   type: integer
+ *                   example: -1
+ *                 EM:
+ *                   type: string
+ *                   example: "Email not found. Please start the forgot password process again."
+ * /verify-forgot-code:
+ *   post:
+ *     tags:
+ *       - Password Reset
+ *     summary: Verify reset code
+ *     description: Verifies the OTP code sent to user's email
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - code
+ *             properties:
+ *               code:
+ *                 type: string
+ *                 description: 6-digit OTP code
+ *                 example: "123456"
+ *     responses:
+ *       '200':
+ *         description: Code verified successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 EC:
+ *                   type: integer
+ *                   example: 1
+ *                 EM:
+ *                   type: string
+ *                   example: "Code verified successfully"
+ *       '400':
+ *         description: Invalid or expired code
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 EC:
+ *                   type: integer
+ *                   example: -1
+ *                 EM:
+ *                   type: string
+ *                   oneOf:
+ *                     - example: "Invalid code. Please try again."
+ *                     - example: "Token has expired. Please request a new one."
+ *       '500':
+ *         description: Server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 EC:
+ *                   type: integer
+ *                   example: -1
+ *                 EM:
+ *                   type: string
+ *                   example: "Error verifying reset code"
+ *
+ * /reset-password:
+ *   post:
+ *     tags:
+ *       - Password Reset
+ *     summary: Reset password
+ *     description: Resets user's password after verification
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - newPassword
+ *               - confirmPassword
+ *             properties:
+ *               newPassword:
+ *                 type: string
+ *                 format: password
+ *                 example: "newPassword123"
+ *               confirmPassword:
+ *                 type: string
+ *                 format: password
+ *                 example: "newPassword123"
+ *     responses:
+ *       '200':
+ *         description: Password reset successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 EC:
+ *                   type: integer
+ *                   example: 1
+ *                 EM:
+ *                   type: string
+ *                   example: "Password reset successfully"
+ *       '400':
+ *         description: Bad request - Passwords don't match
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 EC:
+ *                   type: integer
+ *                   example: -1
+ *                 EM:
+ *                   type: string
+ *                   example: "Passwords do not match."
+ *       '500':
+ *         description: Server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 EC:
+ *                   type: integer
+ *                   example: -1
+ *                 EM:
+ *                   type: string
+ *                   example: "Error resetting password"
+ *     security: []
+ */
 //forgot password
 router.get("/forgot-password", loginController.getForgotPasswordPage);
 router.get("/verify-forgot-code", loginController.getVerifyForgotCodePage);
