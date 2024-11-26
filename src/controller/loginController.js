@@ -22,9 +22,9 @@ const getLoginPage = (req, res) => {
 const verifySSOToken = async (req, res) => {
   try {
     const { ssoToken } = req.body;
+    console.log("check code from req.user", req.user);
     if (req.user && req.user.code && req.user.code === ssoToken) {
       const refreshToken = uuidv4();
-
       //update user refresh token
       await AuthService.updateRefreshToken(req.user.email, refreshToken);
 
