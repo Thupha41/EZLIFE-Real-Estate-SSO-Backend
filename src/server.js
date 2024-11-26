@@ -27,11 +27,11 @@ const options = {
     },
     servers: [
       {
-        url: `http://${process.env.HOST_NAME}:${process.env.PORT}/api/v1`,
+        url: `${process.env.PUBLIC_SSO_PATH}/api/v1`,
         description: "Development server",
       },
       {
-        url: `http://${process.env.HOST_NAME}:${process.env.PORT}`,
+        url: `${process.env.PUBLIC_SSO_PATH}`,
         description: "Development server",
       },
     ],
