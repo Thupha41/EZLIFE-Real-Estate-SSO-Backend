@@ -48,3 +48,5 @@ networks:
   sso-network:
     driver: bridge
 #docker compose up -d --build
+
+#docker exec -i db-mysql-sso mysql -uroot -p${DB_PASSWORD} --default-character-set=utf8mb4 ${DB_NAME} < init.sql
