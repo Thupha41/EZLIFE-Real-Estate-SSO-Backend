@@ -45,13 +45,15 @@ const verifySSOToken = async (req, res) => {
         httpOnly: true,
         maxAge: 60 * 60 * 24 * 1000,
         domain: "52.65.28.64",
-        sameSite: "none",
+        sameSite: "lax",
+        secure: false,
       });
       res.cookie("access_token", token, {
         httpOnly: true,
         maxAge: 60 * 60 * 1000,
         domain: "52.65.28.64",
-        sameSite: "none",
+        sameSite: "lax",
+        secure: false,
       });
 
       const resData = {
