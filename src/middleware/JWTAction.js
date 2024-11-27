@@ -50,7 +50,7 @@ const checkUserJWT = async (req, res, next) => {
       decoded.access_token = access_token;
       decoded.refresh_token = cookies.refresh_token;
       req.user = decoded;
-      // console.log(">>> check user", req.user);
+      console.log(">>> check user from JWT middleware", req.user);
       next();
     } else if (decoded && decoded === "Token expired error") {
       // handle refresh token
@@ -63,10 +63,14 @@ const checkUserJWT = async (req, res, next) => {
           res.cookie("refresh_token", newRefreshToken, {
             httpOnly: true,
             maxAge: 60 * 60 * 24 * 1000,
+            domain: "52.65.28.64",
+            sameSite: "none",
           });
           res.cookie("access_token", newAccessToken, {
             httpOnly: true,
             maxAge: 60 * 60 * 1000,
+            domain: "52.65.28.64",
+            sameSite: "none",
           });
         }
         return res.status(405).json({
