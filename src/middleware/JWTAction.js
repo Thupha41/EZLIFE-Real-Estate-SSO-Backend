@@ -46,7 +46,7 @@ const checkUserJWT = async (req, res, next) => {
     let access_token =
       cookies && cookies.access_token ? cookies.access_token : tokenFromHeader;
     let decoded = verifyToken(access_token);
-    console.log(">>> check decoded", decoded);
+    // console.log(">>> check decoded", decoded);
     if (decoded && decoded !== "Token expired error") {
       decoded.access_token = access_token;
       decoded.refresh_token = cookies.refresh_token;
@@ -65,13 +65,15 @@ const checkUserJWT = async (req, res, next) => {
             httpOnly: true,
             maxAge: 60 * 60 * 24 * 1000,
             domain: "52.65.28.64",
-            sameSite: "none",
+            sameSite: "lax",
+            secure: false,
           });
           res.cookie("access_token", newAccessToken, {
             httpOnly: true,
             maxAge: 60 * 60 * 1000,
             domain: "52.65.28.64",
-            sameSite: "none",
+            sameSite: "lax",
+            secure: false,
           });
         }
         return res.status(405).json({

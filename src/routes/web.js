@@ -31,12 +31,12 @@ router.post("/login", function (req, res, next) {
     }
     req.login(user, function (err) {
       if (err) return next(err);
-      console.log(">> check login res", res);
+      console.log("check req.body login", req.body);
+      console.log("chek user login", user);
       return res
         .status(200)
         .json({ ...user, redirectURL: req.body.redirectURL });
     });
-    console.log(">> check login res", res);
   })(req, res, next);
 });
 

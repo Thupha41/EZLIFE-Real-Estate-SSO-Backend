@@ -38,7 +38,8 @@ const configSession = (app) => {
         httpOnly: true,
         maxAge: 24 * 60 * 60 * 1000,
         domain: "52.65.28.64",
-        sameSite: "none",
+        secure: false,
+        sameSite: "lax",
       },
     })
   );
