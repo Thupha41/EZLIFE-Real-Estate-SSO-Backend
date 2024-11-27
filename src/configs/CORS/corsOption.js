@@ -40,40 +40,53 @@
 // };
 
 // export default configCors;
-require("dotenv").config();
+// require("dotenv").config();
+// import allowedOrigins from "./allowedOrigin";
+
+// const configCors = (app) => {
+//   const isAllowedOrigin = (origin) => {
+//     // For local development or same-origin requests
+//     if (!origin) return true;
+//     return allowedOrigins.includes(origin);
+//   };
+
+//   app.use(function (req, res, next) {
+//     const origin = req.headers.origin;
+
+//     if (isAllowedOrigin(origin)) {
+//       // Only set the header if origin exists
+//       if (origin) {
+//         res.setHeader("Access-Control-Allow-Origin", origin);
+//       }
+//       res.setHeader("Access-Control-Allow-Credentials", true);
+//       res.setHeader(
+//         "Access-Control-Allow-Methods",
+//         "GET, POST, OPTIONS, PUT, PATCH, DELETE"
+//       );
+//       res.setHeader(
+//         "Access-Control-Allow-Headers",
+//         "X-Requested-With,content-type,Authorization"
+//       );
+//     }
+
+//     if (req.method === "OPTIONS") {
+//       return res.sendStatus(200);
+//     }
+//     next();
+//   });
+// };
+
 import allowedOrigins from "./allowedOrigin";
 
-const configCors = (app) => {
-  const isAllowedOrigin = (origin) => {
-    // For local development or same-origin requests
-    if (!origin) return true;
-    return allowedOrigins.includes(origin);
-  };
-
-  app.use(function (req, res, next) {
-    const origin = req.headers.origin;
-
-    if (isAllowedOrigin(origin)) {
-      // Only set the header if origin exists
-      if (origin) {
-        res.setHeader("Access-Control-Allow-Origin", origin);
-      }
-      res.setHeader("Access-Control-Allow-Credentials", true);
-      res.setHeader(
-        "Access-Control-Allow-Methods",
-        "GET, POST, OPTIONS, PUT, PATCH, DELETE"
-      );
-      res.setHeader(
-        "Access-Control-Allow-Headers",
-        "X-Requested-With,content-type,Authorization"
-      );
+const corsOption = {
+  origin: (origin, callback) => {
+    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
     }
-
-    if (req.method === "OPTIONS") {
-      return res.sendStatus(200);
-    }
-    next();
-  });
+  },
+  optionsSuccessStatus: 200,
 };
 
-export default configCors;
+export default corsOption;
