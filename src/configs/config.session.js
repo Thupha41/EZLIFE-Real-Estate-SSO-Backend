@@ -35,7 +35,10 @@ const configSession = (app) => {
       checkExpirationInterval: 15 * 60 * 1000, // The interval at which to cleanup expired sessions in milliseconds.
       expiration: 500 * 1000,
       cookie: {
-        expires: 500 * 1000,
+        httpOnly: true,
+        maxAge: 24 * 60 * 60 * 1000,
+        domain: "52.65.28.64",
+        sameSite: "none",
       },
     })
   );
