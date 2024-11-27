@@ -9,6 +9,7 @@ const allowedOrigins = [
   process.env.HOST_NAME + ":" + process.env.PORT,
   process.env.PUBLIC_SSO_PATH,
   process.env.PUBLIC_SSO_PATH + "/api/v1",
-];
+  process.env.SERVICE_PATH,
+].filter(Boolean);
 
 module.exports = allowedOrigins;
