@@ -224,6 +224,13 @@ const app = express();
 
 const port = process.env.PORT || 8888;
 const hostname = process.env.HOST_NAME;
+//Khai bao config cors
+app.use(credentials);
+app.use(cors(corsOption));
+//config cookie parse
+app.use(cookieParser());
+
+configSession(app);
 
 //config flash
 app.use(flash());
@@ -241,13 +248,6 @@ app.use(
     customSiteTitle: "EZLIFE Real Estate SSO API",
   })
 );
-//config cookie parse
-app.use(cookieParser());
-
-configSession(app);
-//Khai bao config cors
-app.use(credentials);
-app.use(cors(corsOption));
 
 //Khai bao web route
 app.use("/", webRoutes);

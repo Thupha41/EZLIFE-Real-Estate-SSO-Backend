@@ -39,7 +39,7 @@ const configSession = (app) => {
         maxAge: 24 * 60 * 60 * 1000,
         // domain: "52.65.28.64",
         secure: false,
-        sameSite: "lax",
+        path: "/",
       },
     })
   );
