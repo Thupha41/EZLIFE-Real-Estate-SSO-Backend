@@ -37,7 +37,7 @@ const configSession = (app) => {
       cookie: {
         httpOnly: true,
         maxAge: 24 * 60 * 60 * 1000,
-        domain: "52.65.28.64",
+        // domain: "52.65.28.64",
         secure: false,
         sameSite: "lax",
       },

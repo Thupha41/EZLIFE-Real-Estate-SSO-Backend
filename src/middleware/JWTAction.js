@@ -64,14 +64,14 @@ const checkUserJWT = async (req, res, next) => {
           res.cookie("refresh_token", newRefreshToken, {
             httpOnly: true,
             maxAge: 60 * 60 * 24 * 1000,
-            domain: "52.65.28.64",
+            // domain: "52.65.28.64",
             sameSite: "lax",
             secure: false,
           });
           res.cookie("access_token", newAccessToken, {
             httpOnly: true,
             maxAge: 60 * 60 * 1000,
-            domain: "52.65.28.64",
+            // domain: "52.65.28.64",
             sameSite: "lax",
             secure: false,
           });
