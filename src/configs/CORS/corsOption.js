@@ -45,14 +45,19 @@ import allowedOrigins from "./allowedOrigin";
 
 const configCors = (app) => {
   const isAllowedOrigin = (origin) => {
-    return allowedOrigins.includes(origin) || !origin;
+    // For local development or same-origin requests
+    if (!origin) return true;
+    return allowedOrigins.includes(origin);
   };
 
   app.use(function (req, res, next) {
     const origin = req.headers.origin;
 
     if (isAllowedOrigin(origin)) {
-      res.setHeader("Access-Control-Allow-Origin", origin);
+      // Only set the header if origin exists
+      if (origin) {
+        res.setHeader("Access-Control-Allow-Origin", origin);
+      }
       res.setHeader("Access-Control-Allow-Credentials", true);
       res.setHeader(
         "Access-Control-Allow-Methods",
