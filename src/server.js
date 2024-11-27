@@ -3,7 +3,7 @@ import express from "express";
 import configViewEngine from "./configs/viewEngine";
 import webRoutes from "./routes/web";
 import initApiRoute from "./routes/api";
-import configCors from "./configs/CORS/corsOption";
+// import configCors from "./configs/CORS/corsOption";
 import cookieParser from "cookie-parser";
 import { configPassport } from "./controller/passportController";
 import configSession from "./configs/config.session";
@@ -16,7 +16,9 @@ const file = fs.readFileSync("./sso-swagger.yaml", "utf8");
 const swaggerDocument = YAML.parse(file);
 import swaggerUi from "swagger-ui-express";
 import swaggerJsdoc from "swagger-jsdoc";
-
+import credentials from "./middleware/credentials";
+import corsOption from "./configs/CORS/corsOption";
+import cors from "cors";
 const options = {
   definition: {
     openapi: "3.0.0",
@@ -244,7 +246,9 @@ app.use(cookieParser());
 
 configSession(app);
 //Khai bao config cors
-configCors(app);
+app.use(credentials);
+app.use(cors(corsOption));
+
 //Khai bao web route
 app.use("/", webRoutes);
 

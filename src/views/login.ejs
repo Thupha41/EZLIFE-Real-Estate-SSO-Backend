@@ -333,6 +333,9 @@
           },
           withCredentials: true,
           credentials: "include",
+          xhrFields: {
+            withCredentials: true,
+          },
           success: function (response) {
             console.log(">>> check response", response);
             $("#error-message").addClass("none-error-message");
