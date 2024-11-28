@@ -32,7 +32,8 @@ router.post("/login", function (req, res, next) {
     req.login(user, function (err) {
       if (err) return next(err);
       console.log("check req.body login", req.body);
-      console.log("chek user login", user);
+      console.log("check user login", user);
+
       return res
         .status(200)
         .json({ ...user, redirectURL: req.body.redirectURL });
