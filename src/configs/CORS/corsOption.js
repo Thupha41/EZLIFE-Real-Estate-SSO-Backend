@@ -88,10 +88,14 @@ const corsOption = {
   },
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
-  // exposedHeaders: ["set-cookie"],
+  exposedHeaders: [
+    "Set-Cookie",
+    "Access-Control-Allow-Credentials",
+    "set-cookie",
+  ],
   credentials: true,
   optionsSuccessStatus: 200,
-  // preflightContinue: false,
+  preflightContinue: false,
 };
 
 export default corsOption;

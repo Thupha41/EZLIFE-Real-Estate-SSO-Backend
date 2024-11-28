@@ -65,11 +65,15 @@ const checkUserJWT = async (req, res, next) => {
             httpOnly: true,
             maxAge: 60 * 60 * 24 * 1000,
             secure: false,
+            path: "/",
+            sameSite: "lax",
           });
           res.cookie("access_token", newAccessToken, {
             httpOnly: true,
             maxAge: 60 * 60 * 1000,
             secure: false,
+            path: "/",
+            sameSite: "lax",
           });
         }
         return res.status(405).json({
