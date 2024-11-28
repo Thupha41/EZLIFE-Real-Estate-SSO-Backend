@@ -40,7 +40,7 @@ const configSession = (app) => {
         // domain: ".52.65.28.64",
         secure: false,
         path: "/",
-        sameSite: "none",
+        // sameSite: "none",
       },
     })
   );
