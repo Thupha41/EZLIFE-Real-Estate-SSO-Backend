@@ -42,6 +42,7 @@ const checkUserJWT = async (req, res, next) => {
   //extract token from header
   const tokenFromHeader = extractToken(req);
   let cookies = req.cookies;
+  console.log(">>> check cookies", cookies);
   if ((cookies && cookies.access_token) || tokenFromHeader) {
     let access_token =
       cookies && cookies.access_token ? cookies.access_token : tokenFromHeader;
@@ -64,16 +65,18 @@ const checkUserJWT = async (req, res, next) => {
           res.cookie("refresh_token", newRefreshToken, {
             httpOnly: true,
             maxAge: 60 * 60 * 24 * 1000,
-            secure: false,
+            domain: "52.65.28.64",
+            secure: true,
             path: "/",
-            sameSite: "lax",
+            sameSite: "none",
           });
           res.cookie("access_token", newAccessToken, {
             httpOnly: true,
             maxAge: 60 * 60 * 1000,
-            secure: false,
+            domain: "52.65.28.64",
+            secure: true,
             path: "/",
-            sameSite: "lax",
+            sameSite: "none",
           });
         }
         return res.status(405).json({
