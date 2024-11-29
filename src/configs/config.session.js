@@ -25,6 +25,7 @@ const configSession = (app) => {
     db: sequelize,
   });
 
+  app.set("trust proxy", 1);
   app.use(
     session({
       secret: "keyboard cat",
@@ -39,7 +40,7 @@ const configSession = (app) => {
         maxAge: 24 * 60 * 60 * 1000,
         secure: true,
         secure: false,
-        domain: "sso.ezgroups.com.vn",
+        domain: ".ezgroups.com.vn",
         sameSite: "strict",
         partitioned: true,
         path: "/",
