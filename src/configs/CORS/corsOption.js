@@ -100,7 +100,6 @@ const corsOption = {
   ],
   credentials: true,
   optionsSuccessStatus: 200,
-  preflightContinue: false,
 };
 
 export default corsOption;

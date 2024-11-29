@@ -1,7 +1,8 @@
 require("dotenv").config();
 const allowedOrigins = [
-  "http://localhost:5173",
-  "http://52.65.28.64:8080",
+  "https://ezlife-real-estate-frontend.vercel.app",
+  "http://sso.ezgroups.com.vn",
+  "https://sso.ezgroups.com.vn",
   process.env.REACT_PATH,
   process.env.REACT_PATH_SSO,
   process.env.SERVICE_PATH,

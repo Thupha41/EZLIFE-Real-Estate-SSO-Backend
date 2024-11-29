@@ -44,18 +44,18 @@ const verifySSOToken = async (req, res) => {
       res.cookie("refresh_token", refreshToken, {
         httpOnly: true,
         maxAge: 60 * 60 * 24 * 1000,
-        domain: "52.65.28.64",
         secure: true,
-        path: "/",
+        domain: "ezlife-real-estate-frontend.vercel.app",
         sameSite: "none",
+        path: "/",
       });
       res.cookie("access_token", token, {
         httpOnly: true,
         maxAge: 60 * 60 * 1000,
-        domain: "52.65.28.64",
         secure: true,
-        path: "/",
+        domain: "ezlife-real-estate-frontend.vercel.app",
         sameSite: "none",
+        path: "/",
       });
 
       const resData = {
