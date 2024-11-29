@@ -92,6 +92,8 @@ const corsOption = {
     "Authorization",
     "X-Requested-With",
     "Access-Control-Allow-Credentials",
+    "Cookie",
+    "Set-Cookie",
   ],
   exposedHeaders: [
     "Set-Cookie",
@@ -100,6 +102,8 @@ const corsOption = {
   ],
   credentials: true,
   optionsSuccessStatus: 200,
+  preflightContinue: false,
+  maxAge: 86400,
 };
 
 export default corsOption;
