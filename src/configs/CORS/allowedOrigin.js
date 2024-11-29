@@ -5,7 +5,6 @@ const allowedOrigins = [
   "https://sso.ezgroups.com.vn",
   "https://ezlife-real-estate-git-95a927-phatngo040103-gmailcoms-projects.vercel.app",
   "https://ezlife-real-estate-frontend-fss7rxmyf.vercel.app",
-  "https://*.vercel.app",
   "http://localhost:5173",
   process.env.REACT_PATH,
   process.env.REACT_PATH_SSO,
