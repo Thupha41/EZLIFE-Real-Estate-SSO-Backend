@@ -86,7 +86,25 @@ const corsOption = {
       callback(new Error("Not allowed by CORS"));
     }
   },
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: [
+    "Content-Type",
+    "Authorization",
+    "X-Requested-With",
+    "Access-Control-Allow-Credentials",
+    "Cookie",
+    "Set-Cookie",
+  ],
+  exposedHeaders: ["Set-Cookie"],
   optionsSuccessStatus: 200,
 };
-
-export default corsOption;
+const additionalHeaders = (req, res, next) => {
+  res.header("Access-Control-Allow-Origin", req.headers.origin);
+  res.header("Access-Control-Allow-Credentials", true);
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  next();
+};
+export { corsOption, additionalHeaders };
