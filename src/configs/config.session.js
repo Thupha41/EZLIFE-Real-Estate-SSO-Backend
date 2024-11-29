@@ -25,7 +25,6 @@ const configSession = (app) => {
     db: sequelize,
   });
 
-  app.set("trust proxy", 1);
   app.use(
     session({
       secret: "keyboard cat",

@@ -224,6 +224,8 @@ const app = express();
 
 const port = process.env.PORT || 8888;
 const hostname = process.env.HOST_NAME;
+
+app.set("trust proxy", 1);
 //Khai bao config cors
 app.use(credentials);
 app.use(cors(corsOption));
