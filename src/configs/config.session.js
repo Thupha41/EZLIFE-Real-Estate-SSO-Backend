@@ -38,7 +38,6 @@ const configSession = (app) => {
         httpOnly: true,
         maxAge: 24 * 60 * 60 * 1000,
         secure: true,
-        secure: false,
         domain: ".ezgroups.com.vn",
         sameSite: "strict",
         partitioned: true,
