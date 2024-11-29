@@ -67,7 +67,7 @@ const checkUserJWT = async (req, res, next) => {
             maxAge: 60 * 60 * 24 * 1000,
             domain: "ezlife-real-estate-frontend.vercel.app",
             secure: true,
-            sameSite: "strict",
+            sameSite: "none",
             partitioned: true,
             path: "/",
           });
@@ -76,7 +76,7 @@ const checkUserJWT = async (req, res, next) => {
             maxAge: 60 * 60 * 1000,
             domain: "ezlife-real-estate-frontend.vercel.app",
             secure: true,
-            sameSite: "strict",
+            sameSite: "none",
             partitioned: true,
             path: "/",
           });
