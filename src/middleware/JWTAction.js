@@ -42,7 +42,7 @@ const checkUserJWT = async (req, res, next) => {
   //extract token from header
   const tokenFromHeader = extractToken(req);
   let cookies = req.cookies;
-  console.log(">>> check cookies", cookies);
+  console.log(">>> check cookies", req.cookies);
   if ((cookies && cookies.access_token) || tokenFromHeader) {
     let access_token =
       cookies && cookies.access_token ? cookies.access_token : tokenFromHeader;
@@ -68,6 +68,7 @@ const checkUserJWT = async (req, res, next) => {
             domain: "ezlife-real-estate-frontend.vercel.app",
             secure: true,
             sameSite: "none",
+            partitioned: true,
             path: "/",
           });
           res.cookie("access_token", newAccessToken, {
@@ -76,6 +77,7 @@ const checkUserJWT = async (req, res, next) => {
             domain: "ezlife-real-estate-frontend.vercel.app",
             secure: true,
             sameSite: "none",
+            partitioned: true,
             path: "/",
           });
         }

@@ -25,7 +25,7 @@ const verifySSOToken = async (req, res) => {
     console.log("check code from req.user", req.user);
     if (req.user && req.user.code && req.user.code === ssoToken) {
       const refreshToken = uuidv4();
-      //update user refresh token
+      // update user refresh token
       await AuthService.updateRefreshToken(req.user.email, refreshToken);
 
       let payload = {
@@ -40,13 +40,14 @@ const verifySSOToken = async (req, res) => {
 
       let token = createToken(payload);
 
-      //set cookies
+      // set cookies
       res.cookie("refresh_token", refreshToken, {
         httpOnly: true,
         maxAge: 60 * 60 * 24 * 1000,
         secure: true,
         domain: "ezlife-real-estate-frontend.vercel.app",
         sameSite: "none",
+        partitioned: true,
         path: "/",
       });
       res.cookie("access_token", token, {
@@ -55,6 +56,7 @@ const verifySSOToken = async (req, res) => {
         secure: true,
         domain: "ezlife-real-estate-frontend.vercel.app",
         sameSite: "none",
+        partitioned: true,
         path: "/",
       });
 
