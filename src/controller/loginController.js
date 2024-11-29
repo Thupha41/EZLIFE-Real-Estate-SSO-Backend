@@ -46,7 +46,7 @@ const verifySSOToken = async (req, res) => {
         maxAge: 60 * 60 * 24 * 1000,
         secure: true,
         domain: "ezlife-real-estate-frontend.vercel.app",
-        sameSite: "none",
+        sameSite: "strict",
         partitioned: true,
         path: "/",
       });
@@ -55,7 +55,7 @@ const verifySSOToken = async (req, res) => {
         maxAge: 60 * 60 * 1000,
         secure: true,
         domain: "ezlife-real-estate-frontend.vercel.app",
-        sameSite: "none",
+        sameSite: "strict",
         partitioned: true,
         path: "/",
       });
