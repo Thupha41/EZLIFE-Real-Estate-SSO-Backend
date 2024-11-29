@@ -44,7 +44,7 @@ const verifySSOToken = async (req, res) => {
       res.cookie("refresh_token", refreshToken, {
         httpOnly: true,
         maxAge: 60 * 60 * 24 * 1000,
-        secure: false,
+        secure: true,
         domain: "ezlife-real-estate-frontend.vercel.app",
         // sameSite: "none",
         partitioned: true,
@@ -53,7 +53,7 @@ const verifySSOToken = async (req, res) => {
       res.cookie("access_token", token, {
         httpOnly: true,
         maxAge: 60 * 60 * 1000,
-        secure: false,
+        secure: true,
         domain: "ezlife-real-estate-frontend.vercel.app",
         // sameSite: "none",
         partitioned: true,
