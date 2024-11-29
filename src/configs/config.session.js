@@ -40,7 +40,7 @@ const configSession = (app) => {
         secure: true,
         secure: false,
         domain: "sso.ezgroups.com.vn",
-        sameSite: "none",
+        sameSite: "strict",
         partitioned: true,
         path: "/",
       },
