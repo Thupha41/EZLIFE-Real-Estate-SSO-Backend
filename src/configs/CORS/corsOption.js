@@ -86,24 +86,7 @@ const corsOption = {
       callback(new Error("Not allowed by CORS"));
     }
   },
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: [
-    "Content-Type",
-    "Authorization",
-    "X-Requested-With",
-    "Access-Control-Allow-Credentials",
-    "Cookie",
-    "Set-Cookie",
-  ],
-  exposedHeaders: [
-    "Set-Cookie",
-    "Access-Control-Allow-Credentials",
-    "set-cookie",
-  ],
-  credentials: true,
   optionsSuccessStatus: 200,
-  preflightContinue: false,
-  maxAge: 86400,
 };
 
 export default corsOption;
