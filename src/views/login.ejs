@@ -325,7 +325,7 @@
 
         $.ajax({
           type: "POST",
-          url: `${window.location.origin}/login`,
+          url: `${window.location.origin}/api/v1/auth/login`,
           data: {
             username: $("#username").val().trim(),
             password: $("#password").val(),

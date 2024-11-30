@@ -35,14 +35,6 @@ router.post("/login", function (req, res, next) {
       console.log("check user login", user);
 
       return res
-        .cookie("access_token", user.access_token, {
-          httpOnly: true,
-          maxAge: 60 * 60 * 1000,
-          secure: true,
-          domain: ".ezgroups.com.vn",
-          sameSite: "none",
-          path: "/",
-        })
         .status(200)
         .json({ ...user, redirectURL: req.body.redirectURL });
     });

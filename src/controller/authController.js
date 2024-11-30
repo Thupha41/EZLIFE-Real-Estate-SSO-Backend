@@ -45,14 +45,22 @@ const getLoginPage = (req, res) => {
 };
 const handleLogin = async (req, res) => {
   try {
+    console.log(">>> check req.body AuthController login", req.body);
     let data = await AuthService.login(req.body);
     if (data && data.DT && data.DT.access_token) {
-      res.cookie("access_token", data.DT.access_token, { httpOnly: true });
+      res.cookie("access_token", data.DT.access_token, {
+        httpOnly: true,
+        maxAge: 60 * 60 * 1000,
+        domain: "ezlife-real-estate-frontend.vercel.app",
+        secure: true,
+        sameSite: "None",
+        path: "/",
+      });
     }
 
     return new OK({
       EM: data.EM,
-      DT: data.DT,
+      DT: { ...data.DT, redirectURL: req.body.redirectURL },
     }).send(res);
   } catch (error) {
     console.error("Error in handleLogin:", error);
