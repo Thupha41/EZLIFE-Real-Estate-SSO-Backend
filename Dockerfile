@@ -14,8 +14,8 @@ RUN dos2unix /scripts/wait-for.sh
 
 # Copy and install dependencies
 COPY package*.json ./
-RUN npm install
-RUN npm install -g @babel/core @babel/cli
+RUN npm install --force
+RUN npm install -g @babel/core @babel/cli --force
 
 # Copy the rest of the application
 COPY . .
