@@ -36,12 +36,12 @@ const verifyToken = (token) => {
 };
 
 const checkUserJWT = async (req, res, next) => {
-  // if (nonSecurePaths.includes(req.path) || req.query.searchQuery) return next();
+  if (nonSecurePaths.includes(req.path) || req.query.searchQuery) return next();
 
   //extract token from header
   const tokenFromHeader = extractToken(req);
-  let cookies = req.headers.cookies;
-  console.log(">>> check cookies", req.headers.cookies);
+  let cookies = req.cookies;
+  console.log(">>> check cookies", req.cookies);
   if ((cookies && cookies.access_token) || tokenFromHeader) {
     let access_token =
       cookies && cookies.access_token ? cookies.access_token : tokenFromHeader;
