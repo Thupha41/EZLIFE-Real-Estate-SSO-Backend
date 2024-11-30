@@ -227,9 +227,21 @@ const hostname = process.env.HOST_NAME;
 
 app.set("trust proxy", 1);
 //Khai bao config cors
-app.use(credentials);
-// app.use(corsOption(app));
-app.use(cors({ ...corsOption, credentials: true }));
+// app.use(credentials);
+// // app.use(corsOption(app));
+// app.use(cors({ ...corsOption, credentials: true }));
+app.use(
+  cors({
+    credentials: true,
+    origin: [
+      "https://ezlife-real-estate-frontend.vercel.app",
+      "http://sso.ezgroups.com.vn",
+      "https://sso.ezgroups.com.vn",
+      "https://blog.ezgroups.com.vn/",
+      "http://blog.ezgroups.com.vn/",
+    ],
+  })
+);
 // app.use(additionalHeaders);
 
 //config cookie parse
