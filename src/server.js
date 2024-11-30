@@ -229,7 +229,7 @@ app.set("trust proxy", 1);
 //Khai bao config cors
 app.use(credentials);
 // app.use(corsOption(app));
-app.use(cors(corsOption));
+app.use(cors({ ...corsOption, credentials: true }));
 // app.use(additionalHeaders);
 
 //config cookie parse
