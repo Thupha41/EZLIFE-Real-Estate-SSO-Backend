@@ -289,7 +289,7 @@
       }
 
       function validateForm() {
-        const email = $("#username").val().trim();
+        const email = $("#email").val().trim();
         const password = $("#password").val().trim();
 
         // Clear previous error
@@ -298,7 +298,7 @@
         // Validate email
         if (!email) {
           showError("Please enter your email address");
-          $("#username").focus();
+          $("#email").focus();
           return false;
         }
 
@@ -306,7 +306,7 @@
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) {
           showError("Please enter a valid email address");
-          $("#username").focus();
+          $("#email").focus();
           return false;
         }
 
@@ -327,7 +327,7 @@
           type: "POST",
           url: `${window.location.origin}/api/v1/auth/login`,
           data: {
-            email: $("#username").val().trim(),
+            email: $("#email").val().trim(),
             password: $("#password").val(),
             redirectURL: $("#redirectURL").val(),
           },
@@ -350,12 +350,12 @@
       });
 
       // Handle input changes to clear error message
-      $("#username, #password").on("input", function () {
+      $("#email, #password").on("input", function () {
         $("#error-message").addClass("none-error-message");
       });
 
       // Handle Enter key for both email and password fields
-      $("#username, #password").on("keypress", function (event) {
+      $("#email, #password").on("keypress", function (event) {
         if (event.key === "Enter") {
           event.preventDefault();
           $("#btn-login").click();
@@ -422,12 +422,12 @@
                 ></div>
 
                 <div class="form-group mb-4">
-                  <label for="username" class="form-label">Email Address</label>
+                  <label for="email" class="form-label">Email Address</label>
                   <input
                     type="email"
                     class="form-control"
-                    id="username"
-                    name="username"
+                    id="email"
+                    name="email"
                     placeholder="Enter your email address"
                     required
                   />
