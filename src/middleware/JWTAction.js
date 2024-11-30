@@ -7,8 +7,7 @@ const nonSecurePaths = [
   "/logout",
   "/auth/logout",
   "/auth/register",
-  // "/auth/login",
-  // "/login",
+  "/auth/login",
   "/users/search",
   "/verify-services-jwt",
   "/auth/verify-services-jwt",
@@ -37,7 +36,7 @@ const verifyToken = (token) => {
 };
 
 const checkUserJWT = async (req, res, next) => {
-  // if (nonSecurePaths.includes(req.path) || req.query.searchQuery) return next();
+  if (nonSecurePaths.includes(req.path) || req.query.searchQuery) return next();
 
   //extract token from header
   const tokenFromHeader = extractToken(req);
@@ -54,43 +53,43 @@ const checkUserJWT = async (req, res, next) => {
       req.user = decoded;
       console.log(">>> check user from JWT middleware", req.user);
       next();
-      // } else if (decoded && decoded === "Token expired error") {
-      //   // handle refresh token
-      //   if (cookies && cookies.refresh_token) {
-      //     let generateNewToken = await handleRefreshToken(cookies.refresh_token);
-      //     let newAccessToken = generateNewToken.newAccessToken;
-      //     let newRefreshToken = generateNewToken.newRefreshToken;
-      //     //set cookies
-      //     if (newAccessToken && newRefreshToken) {
-      //       res.cookie("refresh_token", newRefreshToken, {
-      //         httpOnly: true,
-      //         maxAge: 60 * 60 * 24 * 1000,
-      //         domain: "ezlife-real-estate-frontend.vercel.app",
-      //         secure: true,
-      //         sameSite: "None",
-      //         path: "/",
-      //       });
-      //       res.cookie("access_token", newAccessToken, {
-      //         httpOnly: true,
-      //         maxAge: 60 * 60 * 1000,
-      //         domain: "ezlife-real-estate-frontend.vercel.app",
-      //         secure: true,
-      //         sameSite: "None",
-      //         path: "/",
-      //       });
-      //     }
-      //     return res.status(405).json({
-      //       EC: -1,
-      //       EM: "Need to retry with new token",
-      //       DT: "",
-      //     });
-      // } else {
-      //   return res.status(401).json({
-      //     EC: -1,
-      //     EM: "User not authenticated",
-      //     DT: "",
-      //   });
-      // }
+    } else if (decoded && decoded === "Token expired error") {
+      // handle refresh token
+      if (cookies && cookies.refresh_token) {
+        let generateNewToken = await handleRefreshToken(cookies.refresh_token);
+        let newAccessToken = generateNewToken.newAccessToken;
+        let newRefreshToken = generateNewToken.newRefreshToken;
+        //set cookies
+        if (newAccessToken && newRefreshToken) {
+          res.cookie("refresh_token", newRefreshToken, {
+            httpOnly: true,
+            maxAge: 60 * 60 * 24 * 1000,
+            domain: "ezlife-real-estate-frontend.vercel.app",
+            secure: true,
+            sameSite: "None",
+            path: "/",
+          });
+          res.cookie("access_token", newAccessToken, {
+            httpOnly: true,
+            maxAge: 60 * 60 * 1000,
+            domain: "ezlife-real-estate-frontend.vercel.app",
+            secure: true,
+            sameSite: "None",
+            path: "/",
+          });
+        }
+        return res.status(405).json({
+          EC: -1,
+          EM: "Need to retry with new token",
+          DT: "",
+        });
+      } else {
+        return res.status(401).json({
+          EC: -1,
+          EM: "User not authenticated",
+          DT: "",
+        });
+      }
     } else {
       return res.status(401).json({
         EC: -1,
