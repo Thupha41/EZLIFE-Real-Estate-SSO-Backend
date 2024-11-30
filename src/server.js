@@ -17,7 +17,7 @@ const swaggerDocument = YAML.parse(file);
 import swaggerUi from "swagger-ui-express";
 import swaggerJsdoc from "swagger-jsdoc";
 import credentials from "./middleware/credentials";
-import { corsOption, additionalHeaders } from "./configs/CORS/corsOption";
+import corsOption from "./configs/CORS/corsOption";
 import cors from "cors";
 const options = {
   definition: {
@@ -230,7 +230,7 @@ app.set("trust proxy", 1);
 app.use(credentials);
 // app.use(corsOption(app));
 app.use(cors(corsOption));
-app.use(additionalHeaders);
+// app.use(additionalHeaders);
 
 //config cookie parse
 app.use(cookieParser());

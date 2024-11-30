@@ -98,13 +98,5 @@ const corsOption = {
   exposedHeaders: ["Set-Cookie"],
   optionsSuccessStatus: 200,
 };
-const additionalHeaders = (req, res, next) => {
-  res.header("Access-Control-Allow-Origin", req.headers.origin);
-  res.header("Access-Control-Allow-Credentials", true);
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
-  );
-  next();
-};
-export { corsOption, additionalHeaders };
+
+export default corsOption;
