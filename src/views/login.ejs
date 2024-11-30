@@ -289,7 +289,7 @@
       }
 
       function validateForm() {
-        const email = $("#email").val().trim();
+        const email = $("#username").val().trim();
         const password = $("#password").val().trim();
 
         // Clear previous error
@@ -298,7 +298,7 @@
         // Validate email
         if (!email) {
           showError("Please enter your email address");
-          $("#email").focus();
+          $("#username").focus();
           return false;
         }
 
@@ -306,7 +306,7 @@
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) {
           showError("Please enter a valid email address");
-          $("#email").focus();
+          $("#username").focus();
           return false;
         }
 
@@ -323,45 +323,39 @@
       $("#btn-login").on("click", function () {
         if (!validateForm()) return;
 
-        const loginData = {
-          email: $("#email").val().trim(),
-          password: $("#password").val(),
-          redirectURL: $("#redirectURL").val(),
-        };
-
-        // Log the data being sent
-        console.log("Sending login data:", loginData);
-
         $.ajax({
           type: "POST",
           url: `${window.location.origin}/api/v1/auth/login`,
-          data: JSON.stringify(loginData),
-          contentType: "application/json",
+          data: {
+            valueLogin: $("#username").val().trim(),
+            password: $("#password").val(),
+            redirectURL: $("#redirectURL").val(),
+          },
           withCredentials: true,
+          credentials: "include",
           xhrFields: {
             withCredentials: true,
           },
           success: function (response) {
-            console.log("Login response:", response);
+            console.log(">>> check response", response);
             $("#error-message").addClass("none-error-message");
             const redirectURL = `${response.redirectURL}/code?ssoToken=${response.code}`;
             window.location.href = redirectURL;
           },
-          error: function (xhr, status, error) {
-            console.error("Login error:", xhr.responseJSON || error);
+          error: function (request, status, error) {
             $("#password").val("");
-            showError(xhr.responseJSON?.message || "Invalid email or password");
+            showError("Invalid email or password");
           },
         });
       });
 
       // Handle input changes to clear error message
-      $("#email, #password").on("input", function () {
+      $("#username, #password").on("input", function () {
         $("#error-message").addClass("none-error-message");
       });
 
       // Handle Enter key for both email and password fields
-      $("#email, #password").on("keypress", function (event) {
+      $("#username, #password").on("keypress", function (event) {
         if (event.key === "Enter") {
           event.preventDefault();
           $("#btn-login").click();
@@ -428,12 +422,12 @@
                 ></div>
 
                 <div class="form-group mb-4">
-                  <label for="email" class="form-label">Email Address</label>
+                  <label for="username" class="form-label">Email Address</label>
                   <input
                     type="email"
                     class="form-control"
-                    id="email"
-                    name="email"
+                    id="username"
+                    name="username"
                     placeholder="Enter your email address"
                     required
                   />
