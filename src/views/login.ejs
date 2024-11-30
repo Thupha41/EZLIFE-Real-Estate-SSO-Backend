@@ -340,7 +340,7 @@
             console.log(">>> check response", response);
             $("#error-message").addClass("none-error-message");
             const redirectURL = `${response.redirectURL}/code?ssoToken=${response.DT.code}`;
-            window.location.href = redirectURL;
+            // window.location.href = redirectURL;
           },
           error: function (request, status, error) {
             $("#password").val("");
