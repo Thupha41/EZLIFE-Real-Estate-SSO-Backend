@@ -7,7 +7,7 @@ const nonSecurePaths = [
   "/logout",
   "/auth/logout",
   "/auth/register",
-  "/auth/login",
+  // "/auth/login",
   // "/login",
   "/users/search",
   "/verify-services-jwt",
