@@ -9,9 +9,15 @@ import {
   ErrorResponse,
   BadRequestResponse,
 } from "../core/error.response";
+import { verifyToken } from "../middleware/JWTAction";
 import * as handlebars from "handlebars";
 import * as fs from "fs";
 import * as path from "path";
+import jwt from "jsonwebtoken";
+require("dotenv").config();
+
+const key = process.env.JWT_SECRET;
+
 const getLoginPage = (req, res) => {
   const { serviceURL } = req.query;
   return res.render("login.ejs", {
@@ -22,8 +28,8 @@ const getLoginPage = (req, res) => {
 const verifySSOToken = async (req, res) => {
   try {
     const { ssoToken } = req.body;
-    console.log("check cookies from verify sso token", req.cookies);
-    console.log("check code from req.user", req.user);
+    req.user = verifyToken(req.cookies.access_token);
+    console.log("check req.user from verify sso token", req.user);
     if (req.user && req.user.code && req.user.code === ssoToken) {
       const refreshToken = uuidv4();
       // update user refresh token
