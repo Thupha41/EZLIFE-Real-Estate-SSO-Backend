@@ -41,7 +41,6 @@ const checkUserJWT = async (req, res, next) => {
   //extract token from header
   const tokenFromHeader = extractToken(req);
   let cookies = req.cookies;
-  console.log(">>> check cookies", req.cookies);
   if ((cookies && cookies.access_token) || tokenFromHeader) {
     let access_token =
       cookies && cookies.access_token ? cookies.access_token : tokenFromHeader;
@@ -51,7 +50,6 @@ const checkUserJWT = async (req, res, next) => {
       decoded.access_token = access_token;
       decoded.refresh_token = cookies.refresh_token;
       req.user = decoded;
-      console.log(">>> check user from JWT middleware", req.user);
       next();
     } else if (decoded && decoded === "Token expired error") {
       // handle refresh token

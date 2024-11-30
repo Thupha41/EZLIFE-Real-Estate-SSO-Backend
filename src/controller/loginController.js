@@ -13,10 +13,6 @@ import { verifyToken } from "../middleware/JWTAction";
 import * as handlebars from "handlebars";
 import * as fs from "fs";
 import * as path from "path";
-import jwt from "jsonwebtoken";
-require("dotenv").config();
-
-const key = process.env.JWT_SECRET;
 
 const getLoginPage = (req, res) => {
   const { serviceURL } = req.query;
