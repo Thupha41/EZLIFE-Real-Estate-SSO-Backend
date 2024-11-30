@@ -37,7 +37,7 @@ const verifyToken = (token) => {
 };
 
 const checkUserJWT = async (req, res, next) => {
-  if (nonSecurePaths.includes(req.path) || req.query.searchQuery) return next();
+  // if (nonSecurePaths.includes(req.path) || req.query.searchQuery) return next();
 
   //extract token from header
   const tokenFromHeader = extractToken(req);
