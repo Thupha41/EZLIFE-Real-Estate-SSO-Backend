@@ -39,7 +39,7 @@ router.post("/login", function (req, res, next) {
           httpOnly: true,
           maxAge: 60 * 60 * 1000,
           secure: true,
-          domain: "ezlife-real-estate-frontend.vercel.app",
+          domain: ".ezgroups.com.vn",
           sameSite: "none",
           path: "/",
         })
