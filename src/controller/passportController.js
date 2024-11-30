@@ -10,7 +10,6 @@ const configPassport = () => {
           password: password,
         };
         const user = await AuthService.login(rawData);
-        console.log("Check user passport Controller", user);
         if (user && +user.EC === 1) {
           return done(null, user.DT);
         } else {

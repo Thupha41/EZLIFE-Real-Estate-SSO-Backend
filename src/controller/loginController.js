@@ -29,9 +29,8 @@ const verifySSOToken = async (req, res) => {
   try {
     const { ssoToken } = req.body;
     req.user = verifyToken(req.cookies.access_token);
-    console.log("check req.user from verify sso token", req.user);
     if (req.user && req.user.code && req.user.code === ssoToken) {
-      const refreshToken = uuidv4();
+      const refreshToken = req.cookies.refresh_token;
       // update user refresh token
       await AuthService.updateRefreshToken(req.user.email, refreshToken);
 

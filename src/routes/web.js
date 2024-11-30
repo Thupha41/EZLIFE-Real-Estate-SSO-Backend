@@ -11,6 +11,7 @@ import loginController from "../controller/loginController";
 import passport from "passport";
 import checkUser from "../middleware/checkUser";
 import { handleLogout } from "../controller/passportController";
+import { v4 as uuidv4 } from "uuid";
 const router = express.Router();
 
 router.get("/", checkUser.isLogin, getHomePage);
@@ -31,13 +32,21 @@ router.post("/login", function (req, res, next) {
     }
     req.login(user, function (err) {
       if (err) return next(err);
-      console.log("check req.body login", req.body);
-      console.log("check user login", user);
+
+      const refreshToken = uuidv4();
 
       return res
         .cookie("access_token", user.access_token, {
           httpOnly: true,
           maxAge: 60 * 60 * 1000,
+          domain: ".ezgroups.com.vn",
+          secure: true,
+          sameSite: "none",
+          path: "/",
+        })
+        .cookie("refresh_token", refreshToken, {
+          httpOnly: true,
+          maxAge: 60 * 60 * 24 * 1000,
           domain: ".ezgroups.com.vn",
           secure: true,
           sameSite: "none",
