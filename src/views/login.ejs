@@ -339,7 +339,8 @@
           success: function (response) {
             console.log(">>> check response", response);
             $("#error-message").addClass("none-error-message");
-            const redirectURL = `${response.DT.redirectURL}/code?ssoToken=${response.DT.code}`;
+            // const redirectURL = `${response.DT.redirectURL}/code?ssoToken=${response.DT.code}`;
+            const redirectURL = response.redirectURL;
             window.location.href = redirectURL;
           },
           error: function (request, status, error) {
