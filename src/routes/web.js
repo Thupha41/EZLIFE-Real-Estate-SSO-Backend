@@ -75,7 +75,7 @@ router.get(
   passport.authenticate("google", { failureRedirect: "/login" }),
   function (req, res) {
     // Successful authentication, redirect home.
-    console.log(">>> checkout req.user", req.user);
+    console.log(">>> checkout req.user google", req.user);
 
     //save cookies
 
@@ -98,7 +98,7 @@ router.get(
     session: true,
   }),
   function (req, res) {
-    console.log(">>> checkout req.user", req.user);
+    console.log(">>> checkout req.user facebook", req.user);
     return res.render("social.ejs", { ssoToken: req.user.code });
   }
 );
