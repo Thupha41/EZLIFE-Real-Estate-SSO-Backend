@@ -323,28 +323,34 @@
       $("#btn-login").on("click", function () {
         if (!validateForm()) return;
 
+        const loginData = {
+          email: $("#email").val().trim(),
+          password: $("#password").val(),
+          redirectURL: $("#redirectURL").val(),
+        };
+
+        // Log the data being sent
+        console.log("Sending login data:", loginData);
+
         $.ajax({
           type: "POST",
           url: `${window.location.origin}/api/v1/auth/login`,
-          data: {
-            email: $("#email").val().trim(),
-            password: $("#password").val(),
-            redirectURL: $("#redirectURL").val(),
-          },
+          data: JSON.stringify(loginData),
+          contentType: "application/json",
           withCredentials: true,
-          credentials: "include",
           xhrFields: {
             withCredentials: true,
           },
           success: function (response) {
-            console.log(">>> check response", response);
+            console.log("Login response:", response);
             $("#error-message").addClass("none-error-message");
             const redirectURL = `${response.redirectURL}/code?ssoToken=${response.code}`;
             window.location.href = redirectURL;
           },
-          error: function (request, status, error) {
+          error: function (xhr, status, error) {
+            console.error("Login error:", xhr.responseJSON || error);
             $("#password").val("");
-            showError("Invalid email or password");
+            showError(xhr.responseJSON?.message || "Invalid email or password");
           },
         });
       });
