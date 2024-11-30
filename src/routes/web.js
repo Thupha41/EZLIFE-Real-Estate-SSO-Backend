@@ -40,7 +40,7 @@ router.post("/login", function (req, res, next) {
           maxAge: 60 * 60 * 1000,
           secure: true,
           domain: "ezlife-real-estate-frontend.vercel.app",
-          sameSite: "None",
+          sameSite: "none",
           path: "/",
         })
         .status(200)
