@@ -40,7 +40,7 @@ router.post("/login", function (req, res, next) {
           maxAge: 60 * 60 * 1000,
           domain: ".ezgroups.com.vn",
           secure: true,
-          sameSite: "None",
+          sameSite: "none",
           path: "/",
         })
         .status(200)
