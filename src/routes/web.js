@@ -12,6 +12,7 @@ import passport from "passport";
 import checkUser from "../middleware/checkUser";
 import { handleLogout } from "../controller/passportController";
 import { v4 as uuidv4 } from "uuid";
+import { createToken } from "../middleware/JWTAction";
 const router = express.Router();
 
 router.get("/", checkUser.isLogin, getHomePage);
@@ -76,29 +77,38 @@ router.get(
   function (req, res) {
     // Successful authentication, redirect home.
     console.log(">>> checkout req.user google", req.user);
+    let payload = {
+      user_id: req.user.id,
+      roleWithPermission: req.user.roleWithPermission,
+      first_name: req.user.first_name,
+      last_name: req.user.last_name,
+      phone: req.user.phone,
+      address: req.user.address,
+      email: req.user.email,
+      code: req.user.code,
+      roleId: req.user.roleId,
+    };
 
+    let token = createToken(payload);
     //save cookies
-    const refreshToken = uuidv4();
-    return (
-      res
-        // .cookie("access_token", req.user.access_token, {
-        //   httpOnly: true,
-        //   maxAge: 60 * 60 * 1000,
-        //   domain: ".ezgroups.com.vn",
-        //   secure: true,
-        //   sameSite: "none",
-        //   path: "/",
-        // })
-        // .cookie("refresh_token", refreshToken, {
-        //   httpOnly: true,
-        //   maxAge: 60 * 60 * 24 * 1000,
-        //   domain: ".ezgroups.com.vn",
-        //   secure: true,
-        //   sameSite: "none",
-        //   path: "/",
-        // })
-        .render("social.ejs", { ssoToken: req.user.code })
-    );
+    return res
+      .cookie("access_token", token, {
+        httpOnly: true,
+        maxAge: 60 * 60 * 1000,
+        domain: ".ezgroups.com.vn",
+        secure: true,
+        sameSite: "none",
+        path: "/",
+      })
+      .cookie("refresh_token", req.user.refresh_token, {
+        httpOnly: true,
+        maxAge: 60 * 60 * 24 * 1000,
+        domain: ".ezgroups.com.vn",
+        secure: true,
+        sameSite: "none",
+        path: "/",
+      })
+      .render("social.ejs", { ssoToken: req.user.code });
   }
 );
 

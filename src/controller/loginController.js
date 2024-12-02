@@ -36,7 +36,7 @@ const verifySSOToken = async (req, res) => {
       await AuthService.updateRefreshToken(req.user.email, refreshToken);
 
       let payload = {
-        user_id: req.user.user_id,
+        user_id: req.user.user_id || req.user.id,
         roleWithPermission: req.user.roleWithPermission,
         first_name: req.user.first_name,
         last_name: req.user.last_name,
