@@ -15,7 +15,8 @@ INSERT into Permission (url, description) VALUES ('/permissions/create', 'Create
 INSERT into Permission (url, description) VALUES ('/permissions/assign-to-role', 'Assign permissions to role');
 INSERT into Permission (url, description) VALUES ('/roles/permissions', 'Get all permissions by role');
 INSERT into Permission (url, description) VALUES ('/blogs/posts/create-post', 'Create a blog');
-INSERT into Permission (url, description) VALUES ('/blogs/posts', 'Update or delete a post');
+INSERT into Permission (url, description) VALUES ('/blogs/posts/update', 'Update a post');
+INSERT into Permission (url, description) VALUES ('/blogs/posts/delete', 'Delete a post');
 INSERT into Permission (url, description) VALUES ('/blogs/posts/comments/create', 'Create comment for post');
 INSERT into Permission (url, description) VALUES ('/blogs/posts/images/upload', 'Create images for post');
 INSERT into Permission (url, description) VALUES ('/blogs/post/comment', 'Modify or Delete a post');

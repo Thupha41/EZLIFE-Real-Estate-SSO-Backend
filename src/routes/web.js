@@ -78,8 +78,25 @@ router.get(
     console.log(">>> checkout req.user google", req.user);
 
     //save cookies
-
-    return res.render("social.ejs", { ssoToken: req.user.code });
+    const refreshToken = uuidv4();
+    return res
+      .cookie("access_token", req.user.access_token, {
+        httpOnly: true,
+        maxAge: 60 * 60 * 1000,
+        domain: ".ezgroups.com.vn",
+        secure: true,
+        sameSite: "none",
+        path: "/",
+      })
+      .cookie("refresh_token", refreshToken, {
+        httpOnly: true,
+        maxAge: 60 * 60 * 24 * 1000,
+        domain: ".ezgroups.com.vn",
+        secure: true,
+        sameSite: "none",
+        path: "/",
+      })
+      .render("social.ejs", { ssoToken: req.user.code });
   }
 );
 
