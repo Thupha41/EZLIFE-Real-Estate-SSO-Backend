@@ -100,7 +100,7 @@ router.get(
         sameSite: "none",
         path: "/",
       })
-      .cookie("refresh_token", req.user.refresh_token, {
+      .cookie("refresh_token", req.user.refreshToken, {
         httpOnly: true,
         maxAge: 60 * 60 * 24 * 1000,
         domain: ".ezgroups.com.vn",
@@ -128,7 +128,37 @@ router.get(
   }),
   function (req, res) {
     console.log(">>> checkout req.user facebook", req.user);
-    return res.render("social.ejs", { ssoToken: req.user.code });
+    let payload = {
+      user_id: req.user.id,
+      roleWithPermission: req.user.roleWithPermission,
+      first_name: req.user.first_name,
+      last_name: req.user.last_name,
+      email: req.user.email,
+      code: req.user.code,
+      roleId: req.user.roleId,
+    };
+
+    let token = createToken(payload);
+    const refreshToken = uuidv4();
+    //save cookies
+    return res
+      .cookie("access_token", token, {
+        httpOnly: true,
+        maxAge: 60 * 60 * 1000,
+        domain: ".ezgroups.com.vn",
+        secure: true,
+        sameSite: "none",
+        path: "/",
+      })
+      .cookie("refresh_token", refreshToken, {
+        httpOnly: true,
+        maxAge: 60 * 60 * 24 * 1000,
+        domain: ".ezgroups.com.vn",
+        secure: true,
+        sameSite: "none",
+        path: "/",
+      })
+      .render("social.ejs", { ssoToken: req.user.code });
   }
 );
 

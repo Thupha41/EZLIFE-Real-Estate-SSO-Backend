@@ -17,8 +17,6 @@ const configLoginWithFacebook = () => {
       async function (accessToken, refreshToken, profile, cb) {
         try {
           const typeLogin = "facebook";
-          console.log(">>> Facebook profile:", profile);
-
           let rawData = {
             username: profile.displayName,
             email: profile.emails?.[0]?.value || `${profile.id}@facebook.com`,
