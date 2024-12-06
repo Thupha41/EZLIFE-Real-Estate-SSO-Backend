@@ -12,7 +12,7 @@ import {
 import * as handlebars from "handlebars";
 import * as fs from "fs";
 import * as path from "path";
-
+import { verifyToken } from "../middleware/JWTAction";
 const getLoginPage = (req, res) => {
   const { serviceURL } = req.query;
   return res.render("login.ejs", {
