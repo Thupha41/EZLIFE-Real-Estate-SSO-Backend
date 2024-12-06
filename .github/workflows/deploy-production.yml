@@ -1,0 +1,51 @@
+name: CI/CD for SSO Backend API
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # Step 1: Checkout code
+      - uses: actions/checkout@v4
+      # Step 2: Setup Node.js
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.18.1
+          cache: "npm"
+      # Step 3: Create .env file
+      - name: Create .env file
+        run: echo "${{secrets.ENV_PRODUCTION_SSO}}" > .env
+      # Step 4: Install dependencies
+      - run: npm ci
+      # Step 5: Login to docker hub
+      - name: Login to docker hub
+        run: docker login -u ${{secrets.DOCKER_USERNAME_SSO}} -p ${{secrets.DOCKER_PASSWORD_SSO}}
+      # Step 6: Build docker image
+      - name: Build docker image
+        run: docker build -t ${{secrets.DOCKER_USERNAME_SSO}}/sso-backend-api:latest -f Dockerfile .
+      # Step 7: Publish image to docker hub
+      - name: Publish image to docker hub
+        run: docker push ${{secrets.DOCKER_USERNAME_SSO}}/sso-backend-api:latest
+
+  deploy:
+    needs: build
+    runs-on: self-hosted
+    steps:
+      # Step 1: Pull new image
+      - name: Pull Image from docker hub
+        run: docker pull ${{secrets.DOCKER_USERNAME_SSO}}/sso-backend-api:latest
+      # Step 2: Remove old container
+      - name: Delete old container
+        run: docker rm -f sso-backend-api
+      # Step 3: Start new container
+      - name: Run docker container
+        run: docker run -d -p 8080:8080 --name sso-backend-api ${{secrets.DOCKER_USERNAME_SSO}}/sso-backend-api
+      # Step 4: Restart Nginx
+      - name: Connect SSH and Restart Services
+        run: sudo systemctl restart nginx
