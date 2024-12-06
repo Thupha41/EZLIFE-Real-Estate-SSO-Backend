@@ -36,27 +36,9 @@ router.post("/login", function (req, res, next) {
 
       // const refreshToken = uuidv4();
 
-      return (
-        res
-          // .cookie("access_token", user.access_token, {
-          //   httpOnly: true,
-          //   maxAge: 60 * 60 * 1000,
-          //   domain: ".ezgroups.com.vn",
-          //   secure: true,
-          //   sameSite: "none",
-          //   path: "/",
-          // })
-          // .cookie("refresh_token", refreshToken, {
-          //   httpOnly: true,
-          //   maxAge: 60 * 60 * 24 * 1000,
-          //   domain: ".ezgroups.com.vn",
-          //   secure: true,
-          //   sameSite: "none",
-          //   path: "/",
-          // })
-          .status(200)
-          .json({ ...user, redirectURL: req.body.redirectURL })
-      );
+      return res
+        .status(200)
+        .json({ ...user, redirectURL: req.body.redirectURL });
     });
   })(req, res, next);
 });
@@ -79,38 +61,40 @@ router.get(
   function (req, res) {
     // Successful authentication, redirect home.
     console.log(">>> checkout req.user google", req.user);
-    let payload = {
-      user_id: req.user.id,
-      roleWithPermission: req.user.roleWithPermission,
-      first_name: req.user.first_name,
-      last_name: req.user.last_name,
-      phone: req.user.phone,
-      address: req.user.address,
-      email: req.user.email,
-      code: req.user.code,
-      roleId: req.user.roleId,
-    };
+    // let payload = {
+    //   user_id: req.user.id,
+    //   roleWithPermission: req.user.roleWithPermission,
+    //   first_name: req.user.first_name,
+    //   last_name: req.user.last_name,
+    //   phone: req.user.phone,
+    //   address: req.user.address,
+    //   email: req.user.email,
+    //   code: req.user.code,
+    //   roleId: req.user.roleId,
+    // };
 
-    let token = createToken(payload);
+    // let token = createToken(payload);
     //save cookies
-    return res
-      .cookie("access_token", token, {
-        httpOnly: true,
-        maxAge: 60 * 60 * 1000,
-        domain: ".ezgroups.com.vn",
-        secure: true,
-        sameSite: "none",
-        path: "/",
-      })
-      .cookie("refresh_token", req.user.refreshToken, {
-        httpOnly: true,
-        maxAge: 60 * 60 * 24 * 1000,
-        domain: ".ezgroups.com.vn",
-        secure: true,
-        sameSite: "none",
-        path: "/",
-      })
-      .render("social.ejs", { ssoToken: req.user.code });
+    return (
+      res
+        // .cookie("access_token", token, {
+        //   httpOnly: true,
+        //   maxAge: 60 * 60 * 1000,
+        //   domain: ".ezgroups.com.vn",
+        //   secure: true,
+        //   sameSite: "none",
+        //   path: "/",
+        // })
+        // .cookie("refresh_token", req.user.refreshToken, {
+        //   httpOnly: true,
+        //   maxAge: 60 * 60 * 24 * 1000,
+        //   domain: ".ezgroups.com.vn",
+        //   secure: true,
+        //   sameSite: "none",
+        //   path: "/",
+        // })
+        .render("social.ejs", { ssoToken: req.user.code })
+    );
   }
 );
 
@@ -130,37 +114,39 @@ router.get(
   }),
   function (req, res) {
     console.log(">>> checkout req.user facebook", req.user);
-    let payload = {
-      user_id: req.user.id,
-      roleWithPermission: req.user.roleWithPermission,
-      first_name: req.user.first_name,
-      last_name: req.user.last_name,
-      email: req.user.email,
-      code: req.user.code,
-      roleId: req.user.roleId,
-    };
+    // let payload = {
+    //   user_id: req.user.id,
+    //   roleWithPermission: req.user.roleWithPermission,
+    //   first_name: req.user.first_name,
+    //   last_name: req.user.last_name,
+    //   email: req.user.email,
+    //   code: req.user.code,
+    //   roleId: req.user.roleId,
+    // };
 
-    let token = createToken(payload);
-    const refreshToken = uuidv4();
+    // let token = createToken(payload);
+    // const refreshToken = uuidv4();
     //save cookies
-    return res
-      .cookie("access_token", token, {
-        httpOnly: true,
-        maxAge: 60 * 60 * 1000,
-        domain: ".ezgroups.com.vn",
-        secure: true,
-        sameSite: "none",
-        path: "/",
-      })
-      .cookie("refresh_token", refreshToken, {
-        httpOnly: true,
-        maxAge: 60 * 60 * 24 * 1000,
-        domain: ".ezgroups.com.vn",
-        secure: true,
-        sameSite: "none",
-        path: "/",
-      })
-      .render("social.ejs", { ssoToken: req.user.code });
+    return (
+      res
+        // .cookie("access_token", token, {
+        //   httpOnly: true,
+        //   maxAge: 60 * 60 * 1000,
+        //   domain: ".ezgroups.com.vn",
+        //   secure: true,
+        //   sameSite: "none",
+        //   path: "/",
+        // })
+        // .cookie("refresh_token", refreshToken, {
+        //   httpOnly: true,
+        //   maxAge: 60 * 60 * 24 * 1000,
+        //   domain: ".ezgroups.com.vn",
+        //   secure: true,
+        //   sameSite: "none",
+        //   path: "/",
+        // })
+        .render("social.ejs", { ssoToken: req.user.code })
+    );
   }
 );
 
