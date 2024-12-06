@@ -39,13 +39,13 @@ jobs:
     steps:
       # Step 1: Pull new image
       - name: Pull Image from docker hub
-        run: docker pull ${{secrets.DOCKER_USERNAME_SSO}}/sso-backend-api:latest
+        run: sudo docker pull ${{secrets.DOCKER_USERNAME_SSO}}/sso-backend-api:latest
       # Step 2: Remove old container
       - name: Delete old container
-        run: docker rm -f sso-backend-api
+        run: sudo docker rm -f sso-backend-api
       # Step 3: Start new container
       - name: Run docker container
-        run: docker run -d -p 8080:8080 --name sso-backend-api ${{secrets.DOCKER_USERNAME_SSO}}/sso-backend-api
+        run: sudo docker run -d -p 8080:8080 --name sso-backend-api ${{secrets.DOCKER_USERNAME_SSO}}/sso-backend-api
       # Step 4: Restart Nginx
       - name: Connect SSH and Restart Services
         run: sudo systemctl restart nginx
