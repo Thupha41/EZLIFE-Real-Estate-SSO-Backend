@@ -23,11 +23,14 @@ const getLoginPage = (req, res) => {
 const verifySSOToken = async (req, res) => {
   try {
     const { ssoToken } = req.body;
-    // req.user = verifyToken(req.cookies.access_token) || req.user;
+    req.user = verifyToken(req.cookies.access_token) || req.user;
     console.log(">>> check req-user verifySSOToken", req.user);
     if (req.user && req.user.code && req.user.code === ssoToken) {
-      // const refreshToken = req.cookies.refresh_token || req.user.refreshToken;
-      const refreshToken = uuidv4();
+      const refreshToken =
+        req.cookies.refresh_token ||
+        req.user.refreshToken ||
+        req.user.refresh_token ||
+        uuidv4();
       // update user refresh token
       await AuthService.updateRefreshToken(req.user.email, refreshToken);
 
@@ -62,7 +65,7 @@ const verifySSOToken = async (req, res) => {
       });
 
       const resData = {
-        user_id: req.user.user_id,
+        user_id: req.user.user_id || req.user.id,
         access_token: token,
         refresh_token: refreshToken,
         email: req.user.email,

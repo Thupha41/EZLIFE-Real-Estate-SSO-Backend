@@ -76,8 +76,31 @@ const handleLogin = async (req, res) => {
 
 const handleLogout = (req, res) => {
   try {
-    res.clearCookie("access_token");
-    res.clearCookie("refresh_token");
+    res.clearCookie("access_token", {
+      httpOnly: true,
+      domain: ".ezgroups.com.vn",
+      path: "/",
+      secure: true,
+      sameSite: "None",
+    });
+
+    // Clear refresh_token with matching options
+    res.clearCookie("refresh_token", {
+      httpOnly: true,
+      domain: ".ezgroups.com.vn",
+      path: "/",
+      secure: true,
+      sameSite: "None",
+    });
+
+    // Clear connect.sid (session cookie) if you're using sessions
+    res.clearCookie("connect.sid", {
+      httpOnly: true,
+      domain: ".ezgroups.com.vn",
+      path: "/",
+      secure: false,
+      sameSite: "Strict",
+    });
     return new OK({
       EM: "Clear cookies successfully",
     }).send(res);
