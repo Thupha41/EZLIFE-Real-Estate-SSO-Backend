@@ -37,7 +37,7 @@ const configSession = (app) => {
       cookie: {
         httpOnly: true,
         maxAge: 24 * 60 * 60 * 1000,
-        secure: true,
+        secure: false,
         sameSite: "strict",
         domain: ".ezgroups.com.vn",
         path: "/",
