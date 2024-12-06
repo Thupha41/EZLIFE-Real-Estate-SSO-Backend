@@ -34,27 +34,29 @@ router.post("/login", function (req, res, next) {
     req.login(user, function (err) {
       if (err) return next(err);
 
-      const refreshToken = uuidv4();
+      // const refreshToken = uuidv4();
 
-      return res
-        .cookie("access_token", user.access_token, {
-          httpOnly: true,
-          maxAge: 60 * 60 * 1000,
-          domain: ".ezgroups.com.vn",
-          secure: true,
-          sameSite: "none",
-          path: "/",
-        })
-        .cookie("refresh_token", refreshToken, {
-          httpOnly: true,
-          maxAge: 60 * 60 * 24 * 1000,
-          domain: ".ezgroups.com.vn",
-          secure: true,
-          sameSite: "none",
-          path: "/",
-        })
-        .status(200)
-        .json({ ...user, redirectURL: req.body.redirectURL });
+      return (
+        res
+          // .cookie("access_token", user.access_token, {
+          //   httpOnly: true,
+          //   maxAge: 60 * 60 * 1000,
+          //   domain: ".ezgroups.com.vn",
+          //   secure: true,
+          //   sameSite: "none",
+          //   path: "/",
+          // })
+          // .cookie("refresh_token", refreshToken, {
+          //   httpOnly: true,
+          //   maxAge: 60 * 60 * 24 * 1000,
+          //   domain: ".ezgroups.com.vn",
+          //   secure: true,
+          //   sameSite: "none",
+          //   path: "/",
+          // })
+          .status(200)
+          .json({ ...user, redirectURL: req.body.redirectURL })
+      );
     });
   })(req, res, next);
 });
