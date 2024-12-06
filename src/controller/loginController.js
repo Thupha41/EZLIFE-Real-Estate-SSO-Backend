@@ -9,7 +9,6 @@ import {
   ErrorResponse,
   BadRequestResponse,
 } from "../core/error.response";
-import { verifyToken } from "../middleware/JWTAction";
 import * as handlebars from "handlebars";
 import * as fs from "fs";
 import * as path from "path";
@@ -27,11 +26,8 @@ const verifySSOToken = async (req, res) => {
     // req.user = verifyToken(req.cookies.access_token) || req.user;
     console.log(">>> check req-user verifySSOToken", req.user);
     if (req.user && req.user.code && req.user.code === ssoToken) {
-      const refreshToken = req.cookies.refresh_token || req.user.refreshToken;
-      console.log(
-        ">>> check refreshToken verifySSOToken",
-        req.user.refreshToken
-      );
+      // const refreshToken = req.cookies.refresh_token || req.user.refreshToken;
+      const refreshToken = uuidv4();
       // update user refresh token
       await AuthService.updateRefreshToken(req.user.email, refreshToken);
 
