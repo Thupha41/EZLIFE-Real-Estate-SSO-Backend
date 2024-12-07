@@ -26,12 +26,18 @@ jobs:
       # Step 5: Login to docker hub
       - name: Login to docker hub
         run: docker login -u ${{secrets.DOCKER_USERNAME_SSO}} -p ${{secrets.DOCKER_PASSWORD_SSO}}
-      # Step 6: Build docker image
-      - name: Build docker image
+      # Step 6: Build backend Docker image
+      - name: Build backend Docker image
         run: docker build -t ${{secrets.DOCKER_USERNAME_SSO}}/sso-backend-api:latest -f Dockerfile .
-      # Step 7: Publish image to docker hub
-      - name: Publish image to docker hub
+      # Step 7: Push backend Docker image to Docker Hub
+      - name: Push backend Docker image
         run: docker push ${{secrets.DOCKER_USERNAME_SSO}}/sso-backend-api:latest
+      # Step 8: Tag and push MySQL image (if customized)
+      - name: Push MySQL image
+        run: |
+          docker pull mysql:5.7.40
+          docker tag mysql:5.7.40 ${{secrets.DOCKER_USERNAME_SSO}}/db-mysql-sso:latest
+          docker push ${{secrets.DOCKER_USERNAME_SSO}}/db-mysql-sso:latest
 
   deploy:
     needs: build
@@ -45,7 +51,9 @@ jobs:
         run: sudo docker rm -f sso-backend-api
       # Step 3: Start new container
       - name: Run docker container
-        run: sudo docker run -d -p 8080:8080 --name sso-backend-api ${{secrets.DOCKER_USERNAME_SSO}}/sso-backend-api
+        run: |
+          sudo docker compose down
+          sudo docker compose up -d
       # Step 4: Restart Nginx
       - name: Connect SSH and Restart Services
         run: sudo systemctl restart nginx

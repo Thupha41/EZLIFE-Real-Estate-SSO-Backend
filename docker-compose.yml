@@ -1,6 +1,6 @@
 services:
   db-mysql-sso:
-    image: mysql:5.7.40
+    image: ${DOCKER_USERNAME_SSO}}/db-mysql-sso:latest
     container_name: db-mysql-sso
     restart: unless-stopped
     env_file:
