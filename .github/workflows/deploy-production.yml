@@ -50,7 +50,9 @@ jobs:
           sudo docker pull ${{secrets.DOCKER_USERNAME_SSO}}/db-mysql-sso:latest
       # Step 2: Remove old container
       - name: Delete old container
-        run: sudo docker rm -f sso-backend-api
+        run: |
+          sudo docker rm -f sso-backend-api
+          sudo docker rm -f db-mysql-sso
       # Step 3: Start new container
       - name: Run docker container
         run: |
