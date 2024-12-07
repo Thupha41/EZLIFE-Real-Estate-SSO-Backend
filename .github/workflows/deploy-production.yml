@@ -52,7 +52,8 @@ jobs:
       # Step 3: Start new container
       - name: Run docker container
         run: |
-          sudo docker compose up -d
+          sudo docker run -d -p 8080:8080 --name sso-backend-api ${{secrets.DOCKER_USERNAME_SSO}}/sso-backend-api
+          sudo docker run -d -p 3306:3306 --name db-mysql-sso ${{secrets.DOCKER_USERNAME_SSO}}/db-mysql-sso
       # Step 4: Restart Nginx
       - name: Connect SSH and Restart Services
         run: sudo systemctl restart nginx
