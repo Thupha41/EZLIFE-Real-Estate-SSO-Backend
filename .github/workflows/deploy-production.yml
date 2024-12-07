@@ -45,7 +45,9 @@ jobs:
     steps:
       # Step 1: Pull new image
       - name: Pull Image from docker hub
-        run: sudo docker pull ${{secrets.DOCKER_USERNAME_SSO}}/sso-backend-api:latest
+        run: |
+          sudo docker pull ${{secrets.DOCKER_USERNAME_SSO}}/sso-backend-api:latest
+          sudo docker pull ${{secrets.DOCKER_USERNAME_SSO}}/db-mysql-sso:latest
       # Step 2: Remove old container
       - name: Delete old container
         run: sudo docker rm -f sso-backend-api
@@ -53,7 +55,7 @@ jobs:
       - name: Run docker container
         run: |
           sudo docker run -d -p 8080:8080 --name sso-backend-api ${{secrets.DOCKER_USERNAME_SSO}}/sso-backend-api
-          sudo docker run -d -p 3306:3306 --name db-mysql-sso ${{secrets.DOCKER_USERNAME_SSO}}/db-mysql-sso
+          sudo docker run -d -p 3307:3306 --name db-mysql-sso ${{secrets.DOCKER_USERNAME_SSO}}/db-mysql-sso
       # Step 4: Restart Nginx
       - name: Connect SSH and Restart Services
         run: sudo systemctl restart nginx
